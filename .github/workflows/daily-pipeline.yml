@@ -1,0 +1,80 @@
+name: Daily YouTube Pipeline
+
+on:
+  schedule:
+    # Run at 5:30 AM UTC daily (30 min before Vercel cron at 6 AM)
+    - cron: '30 5 * * *'
+  workflow_dispatch:
+    # Also allows manual trigger + trigger from Vercel /api/refresh
+    inputs:
+      max_per_channel:
+        description: 'Max videos to fetch per channel'
+        default: '15'
+        required: false
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install yt-dlp requests youtube-transcript-api
+
+      - name: Fetch new videos
+        run: |
+          cd pipeline
+          python scripts/fetch_new_videos.py --max-per-channel ${{ github.event.inputs.max_per_channel || '15' }}
+        continue-on-error: true
+
+      - name: Extract transcripts
+        run: |
+          cd pipeline
+          python scripts/extract_transcripts.py --date $(date +%Y%m%d)
+        continue-on-error: true
+
+      - name: Generate NotebookLM sources
+        run: |
+          cd pipeline
+          python scripts/generate_notebooklm_sources.py
+        continue-on-error: true
+
+      - name: Generate content intelligence
+        run: |
+          cd pipeline
+          python scripts/content_intelligence.py --days 7
+          python scripts/generate_content_ideas.py --days 7
+        continue-on-error: true
+
+      - name: Rebuild dashboard data
+        run: |
+          cd pipeline
+          python scripts/rebuild_dashboard.py
+        continue-on-error: true
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "YouTube Intel Bot"
+          git config user.email "bot@yt-intel-pipeline.vercel.app"
+          git add dashboard/transcripts_index.json dashboard/transcripts/ dashboard/index.html || true
+          git add pipeline/data/transcripts/ pipeline/outputs/ || true
+          CHANGES=$(git diff --cached --stat | tail -1)
+          if [ -n "$(git diff --cached --name-only)" ]; then
+            git commit -m "chore: daily pipeline run $(date +%Y-%m-%d) — $CHANGES"
+            git push
+            echo "✓ Data committed and pushed"
+          else
+            echo "No changes to commit"
+          fi

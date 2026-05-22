@@ -1,0 +1,281 @@
+[
+  {
+    "video_id": "l8pRSuU81PU",
+    "title": "Let's reproduce GPT-2 (124M)",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 43388,
+    "url": "https://youtube.com/watch?v=l8pRSuU81PU",
+    "preview": "hi everyone so today we are going to be continuing our Zero to Hero series and in particular today we are going to reproduce the gpt2 model the 124 million version of it so when openi released gpt2 this was 2019 and they released it with this blog post on top of that they released this paper and on"
+  },
+  {
+    "video_id": "7xTGNNLPyMI",
+    "title": "Deep Dive into LLMs like ChatGPT",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 41116,
+    "url": "https://youtube.com/watch?v=7xTGNNLPyMI",
+    "preview": "hi everyone so I've wanted to make this video for a while it is a comprehensive but General audience introduction to large language models like Chachi PT and what I'm hoping to achieve in this video is to give you kind of mental models for thinking through what it is that this tool is it is obviousl"
+  },
+  {
+    "video_id": "EWvNQjAaOHw",
+    "title": "How I use LLMs",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 25287,
+    "url": "https://youtube.com/watch?v=EWvNQjAaOHw",
+    "preview": "hi everyone so in this video I would like to continue our general audience series on large language models like chpd now in the previous video deep dive into llms that you can find on my YouTube we went into a lot of the underhood fundamentals of how these models are trained and how you should think"
+  },
+  {
+    "video_id": "zduSFxRajkE",
+    "title": "Let's build the GPT Tokenizer",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 24679,
+    "url": "https://youtube.com/watch?v=zduSFxRajkE",
+    "preview": "hi everyone so in this video I'd like us to cover the process of tokenization in large language models now you see here that I have a set face and that's because uh tokenization is my least favorite part of working with large language models but unfortunately it is necessary to understand in some de"
+  },
+  {
+    "video_id": "VMj-3S1tku0",
+    "title": "The spelled-out intro to neural networks and backpropagation: building micrograd",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 24352,
+    "url": "https://youtube.com/watch?v=VMj-3S1tku0",
+    "preview": "hello my name is andre and i've been training deep neural networks for a bit more than a decade and in this lecture i'd like to show you what neural network training looks like under the hood so in particular we are going to start with a blank jupiter notebook and by the end of this lecture we will"
+  },
+  {
+    "video_id": "P6sfmUTpUmc",
+    "title": "Building makemore Part 3: Activations & Gradients, BatchNorm",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 21386,
+    "url": "https://youtube.com/watch?v=P6sfmUTpUmc",
+    "preview": "hi everyone today we are continuing our implementation of make more now in the last lecture we implemented the multier perceptron along the lines of benj 2003 for character level language modeling so we followed this paper took in a few characters in the past and used an MLP to predict the next char"
+  },
+  {
+    "video_id": "kCc8FmEb1nY",
+    "title": "Let's build GPT: from scratch, in code, spelled out.",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 21030,
+    "url": "https://youtube.com/watch?v=kCc8FmEb1nY",
+    "preview": "hi everyone so by now you have probably heard of chat GPT it has taken the world and AI Community by storm and it is a system that allows you to interact with an AI and give it text based tasks so for example we can ask chat GPT to write us a small Hau about how important it is that people understan"
+  },
+  {
+    "video_id": "q8SA3rM6ckI",
+    "title": "Building makemore Part 4: Becoming a Backprop Ninja",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 20776,
+    "url": "https://youtube.com/watch?v=q8SA3rM6ckI",
+    "preview": "hi everyone so today we are once again continuing our implementation of make more now so far we've come up to here montalia perceptrons and our neural net looked like this and we were implementing this over the last few lectures now I'm sure everyone is very excited to go into recurring neural netwo"
+  },
+  {
+    "video_id": "PaCmpygFfXo",
+    "title": "The spelled-out intro to language modeling: building makemore",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 19409,
+    "url": "https://youtube.com/watch?v=PaCmpygFfXo",
+    "preview": "hi everyone hope you're well and next up what i'd like to do is i'd like to build out make more like micrograd before it make more is a repository that i have on my github webpage you can look at it but just like with micrograd i'm going to build it out step by step and i'm going to spell everything"
+  },
+  {
+    "video_id": "fsLh-NYhOoU",
+    "title": "The most beautiful formula not enough people understand",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 13110,
+    "url": "https://youtube.com/watch?v=fsLh-NYhOoU",
+    "preview": "[applause and cheering] [applause] Thank you very much. It is good to be here. I don't know if you people realize what a beautiful campus you have and how you basically just study in heaven. Today I want to talk with you about what I think is one of the most underappreciated formulas. Not because th"
+  },
+  {
+    "video_id": "TCH_1BHY58I",
+    "title": "Building makemore Part 2: MLP",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 12771,
+    "url": "https://youtube.com/watch?v=TCH_1BHY58I",
+    "preview": "hi everyone today we are continuing our implementation of makemore now in the last lecture we implemented the bigram language model and we implemented it both using counts and also using a super simple neural network that had a single linear layer now this is the jupyter notebook that we built out l"
+  },
+  {
+    "video_id": "zjkBMFhNj_g",
+    "title": "[1hr Talk] Intro to Large Language Models",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 12151,
+    "url": "https://youtube.com/watch?v=zjkBMFhNj_g",
+    "preview": "hi everyone so recently I gave a 30-minute talk on large language models just kind of like an intro talk um unfortunately that talk was not recorded but a lot of people came to me after the talk and they told me that uh they really liked the talk so I would just I thought I would just re-record it a"
+  },
+  {
+    "video_id": "t3YJ5hKiMQ0",
+    "title": "Building makemore Part 5: Building a WaveNet",
+    "channel": "Andrej Karpathy",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 10385,
+    "url": "https://youtube.com/watch?v=t3YJ5hKiMQ0",
+    "preview": "hi everyone today we are continuing our implementation of make more our favorite character level language model now you'll notice that the background behind me is different that's because I am in Kyoto and it is awesome so I'm in a hotel room here now over the last few lectures we've built up to thi"
+  },
+  {
+    "video_id": "_BrFKp-U8GI",
+    "title": "Exploration & Epiphany | Guest video by Paul Dancstep",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 9729,
+    "url": "https://youtube.com/watch?v=_BrFKp-U8GI",
+    "preview": "[Submit subtitle corrections at criblate.com] Imagine yourself in an art museum. As you stroll through the galleries, you come across a large low table covered in small white skeletal frames. Each looks like a random fragment of a cube, and they're all laid out in an orderly grid. What we're looking"
+  },
+  {
+    "video_id": "ldxFjLJ3rVY",
+    "title": "How (and why) to take a logarithm of an image",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 8541,
+    "url": "https://youtube.com/watch?v=ldxFjLJ3rVY",
+    "preview": "[Submit subtitle corrections at criblate.com]\nWhenever I'm making one of these videos, there's sometimes a special moment where the act of animating involves solving a whole bunch of little technical puzzlers, and then the underlying math I'm trying to explain clicks for me in a way that it hadn't b"
+  },
+  {
+    "video_id": "RQWpF2Gb-gU",
+    "title": "But what is quantum computing?  (Grover's Algorithm)",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 7510,
+    "url": "https://youtube.com/watch?v=RQWpF2Gb-gU",
+    "preview": "A lot of pop science outlets give a certain summary of quantum computing that I can almost guarantee leads to misconceptions. The summary goes something like this. In a classical computer, data is stored with bits, some sequence of ones and zeros, but in a quantum computer, you are able to represent"
+  },
+  {
+    "video_id": "itRV2jEtV8Q",
+    "title": "Simulating and understanding phase change | Guest video by Vilas Winstein",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 7309,
+    "url": "https://youtube.com/watch?v=itRV2jEtV8Q",
+    "preview": "[Submit subtitle corrections at criblate.com] This is a video about phase transitions. Our main goal will be to study a simulation of a discretized fluid model, which has a phase transition as the parameters are varied. That's what you're looking at right now, and it's called the liquid vapor model."
+  },
+  {
+    "video_id": "iv-5mZ_9CPY",
+    "title": "But how do AI images and videos actually work? | Guest video by Welch Labs",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 6493,
+    "url": "https://youtube.com/watch?v=iv-5mZ_9CPY",
+    "preview": "Over the last few years, AI systems have become astonishingly good at turning text props into videos. At the core of how these models operate is a deep connection to physics. This generation of image and video models works using a process known as diffusion, which is remarkably equivalent to the Bro"
+  },
+  {
+    "video_id": "j0wJBEZdwLs",
+    "title": "But what is a Laplace Transform?",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 6287,
+    "url": "https://youtube.com/watch?v=j0wJBEZdwLs",
+    "preview": "[Submit subtitle corrections at criblate.com]\nWhat you're looking at, a somewhat complicated diagram that you and I are going to build up in this video, is a visualization unpacking the meaning behind one of the most powerful tools used to study differential equations. It's known as the Laplace tran"
+  },
+  {
+    "video_id": "Z_pCTBtCmck",
+    "title": "AI Dev 26 x SF | Tom Howlett: Can LLMs Generate Enterprise Quality Code?",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 6154,
+    "url": "https://youtube.com/watch?v=Z_pCTBtCmck",
+    "preview": "So the big question can LLM generate enterprise quality code. So obviously we've seen a big change in engineer in software engineering particularly in code generation. Andre Kaposy has put it really nicely. I'm sure all of you have experienced it. It's super nice. We generate code, it it works, it f"
+  },
+  {
+    "video_id": "BHdbsHFs2P0",
+    "title": "The Hairy Ball Theorem",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 5688,
+    "url": "https://youtube.com/watch?v=BHdbsHFs2P0",
+    "preview": "[Submit subtitle corrections at criblate.com]\nThese days, whenever I look at the back of my beloved 7 month old baby's head, this little swirl of tiny hairs reminds me of one of the most ridiculously named facts in math, the hairy ball theorem. I promise this is a genuinely serious bit of math, wher"
+  },
+  {
+    "video_id": "M-MgQC6z3VU",
+    "title": "What was Euclid really doing? | Guest video by Ben Syversen",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 5634,
+    "url": "https://youtube.com/watch?v=M-MgQC6z3VU",
+    "preview": "[Submit subtitle corrections at criblate.com]\nThis is the fifth and final in a series of guest videos that I've been putting up on the channel. The context, in case any of you missed the first one, is that I have been away on leave this summer and I decided to use the Patreon funds that were coming"
+  },
+  {
+    "video_id": "-j8PzkZ70Lg",
+    "title": "The Physics of Euler's Formula | Laplace Transform Prelude",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 5347,
+    "url": "https://youtube.com/watch?v=-j8PzkZ70Lg",
+    "preview": "[Submit subtitle corrections at criblate.com]\nThis is the first video in a trilogy aimed at demystifying the Laplace transform, a powerful tool for studying differential equations. Although we won't dig into the Laplace transform itself until the next two chapters, everything that we cover here sets"
+  },
+  {
+    "video_id": "6dTyOl1fmDo",
+    "title": "Why colliding blocks compute pi",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 5301,
+    "url": "https://youtube.com/watch?v=6dTyOl1fmDo",
+    "preview": "In 2019, I put out a video about how two colliding blocks can compute pi. It's very fun, very surprising, and if you include the adaptations into shorts that I've posted since then, it is the most popular thing that I've put on the internet, and by a pretty wide margin. This year, for Pi Day, I want"
+  },
+  {
+    "video_id": "hFMaT9oRbs4",
+    "title": "Terence Tao continuing history’s cleverest cosmological measurements",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 5057,
+    "url": "https://youtube.com/watch?v=hFMaT9oRbs4",
+    "preview": "This animation is zooming out by a factor of 10 every 2 seconds. Maybe you've seen things like this before, conveying the mind-boggling scale of our universe, but here, in this video, you and I are going to continue the saga through the many moments of delightful ingenuity throughout Human history t"
+  },
+  {
+    "video_id": "FE-hM1kRK4Y",
+    "title": "Why Laplace transforms are so useful",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 4340,
+    "url": "https://youtube.com/watch?v=FE-hM1kRK4Y",
+    "preview": "I want to show you this simple simulation that I put together that has a mass on a spring, but it's being influenced by an external force that oscillates back and forth. Now, if there was no external force and you pull out this mass and you just let it go, the spring has some kind of natural frequen"
+  },
+  {
+    "video_id": "Dlsa9EBKDGI",
+    "title": "Where my explanation of Grover’s algorithm failed",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 3193,
+    "url": "https://youtube.com/watch?v=Dlsa9EBKDGI",
+    "preview": "Last week I put up a video introducing quantum computing, and in the final section we were stepping through something known as Grover's algorithm. And based on the comments that I saw, I think there was a very common point of confusion that reveals I clearly could have done a better job explaining a"
+  },
+  {
+    "video_id": "EeyLHsND5i0",
+    "title": "AI Dev 26 x SF | Atai Barkai: Fullstack Agents & Generative UI with AG UI",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 3087,
+    "url": "https://youtube.com/watch?v=EeyLHsND5i0",
+    "preview": "Cop of copet kit. We make developer infrastructure for uh copets which are user interactive agents as opposed to fully autonomous agents. And we really make the layers that connect the agentic world with the userfacing application world. And today copc powers tens of millions of interactions in prod"
+  },
+  {
+    "video_id": "7VISmcJpqis",
+    "title": "AI Dev 26 x SF | Ashwyn Sharma: Every App Needs a Voice UI. Here's How to Build It",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 2695,
+    "url": "https://youtube.com/watch?v=7VISmcJpqis",
+    "preview": "I'm Ashin Sharma, CEO and co-founder of Vocal Bridge. Super excited to be talking about voice interfaces and how you can build them yourself with Vocal Bridge, a company I co-ounded with Andrew Inc's AI fund and deep learning.AI. Personally, I've spent the last decade of my life shipping voice AI at"
+  },
+  {
+    "video_id": "4NlrfOl0l8U",
+    "title": "The AI that solved IMO Geometry Problems | Guest video by @Aleph 0",
+    "channel": "3Blue1Brown",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 2632,
+    "url": "https://youtube.com/watch?v=4NlrfOl0l8U",
+    "preview": "[Submit subtitle corrections at criblate.com]\nIn January 2024, Google DeepMind released an AI model called Alpha Geometry, which could solve geometry problems from the International Mathematical Olympiad, or the IMO. The IMO is the highest level of competitive math contests at the high school level."
+  },
+  {
+    "video_id": "klAynlP04h0",
+    "title": "AI Dev 26 x SF | Idan Raman: The Identity Crisis of Browser Agents",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-22T00:00:00+00:00",
+    "words": 2459,
+    "url": "https://youtube.com/watch?v=klAynlP04h0",
+    "preview": "Today I'll be speaking about >> [music] >> what we call the identity crisis for browser agents or how can we take human identities and let AI agents use them in a way which is very secure and reliable. So, just a bit about Anchor and about me before we get going. So, I'm Idan Goldman. I'm one of the"
+  }
+]

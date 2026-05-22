@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Intelligence Pipeline — Dashboard</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161e;
+    --border: #1e1e2a;
+    --border-bright: #2a2a3a;
+    --accent: #6366f1;
+    --accent2: #8b5cf6;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #475569;
+    --font: 'Inter', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+  }
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .header-meta {
+    display: flex; align-items: center; gap: 20px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+  /* LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+  .sidebar-section { margin-bottom: 8px; }
+  .sidebar-label {
+    padding: 4px 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 4px;
+  }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar-link:hover, .sidebar-link.active {
+    color: var(--text);
+    background: rgba(99,102,241,0.08);
+    border-left-color: var(--accent);
+  }
+  .sidebar-link .icon { font-size: 15px; width: 18px; text-align: center; }
+  .sidebar-badge {
+    margin-left: auto;
+    background: rgba(99,102,241,0.2);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  /* MAIN */
+  .main { padding: 32px; overflow-x: hidden; }
+  .section { margin-bottom: 40px; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 18px; font-weight: 700;
+    letter-spacing: -0.4px;
+  }
+  .section-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* STAT CARDS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--border-bright); }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .stat-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+  .stat-value.green { color: var(--green); }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.cyan { color: var(--accent3); }
+  .stat-value.yellow { color: var(--yellow); }
+  .stat-meta { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .stat-icon { position: absolute; top: 16px; right: 16px; font-size: 22px; opacity: 0.15; }
+
+  /* PIPELINE FLOW */
+  .pipeline-flow {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    overflow-x: auto;
+  }
+  .flow-steps {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    min-width: 900px;
+  }
+  .flow-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 28px;
+    font-size: 18px;
+    color: var(--accent);
+    z-index: 2;
+    font-weight: 300;
+  }
+  .flow-node {
+    background: var(--surface);
+    border: 1.5px solid var(--border-bright);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    width: calc(100% - 24px);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .flow-node:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(99,102,241,0.15);
+  }
+  .flow-node.active {
+    border-color: var(--green);
+    box-shadow: 0 0 16px rgba(16,185,129,0.15);
+  }
+  .flow-node-num {
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    margin: 0 auto 8px;
+  }
+  .flow-node-icon { font-size: 20px; margin-bottom: 6px; }
+  .flow-node-name { font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .flow-node-script { font-size: 9px; color: var(--muted); font-family: var(--mono); }
+  .flow-node-stat {
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    padding: 2px 8px;
+    background: rgba(16,185,129,0.1);
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .flow-connector { display: flex; align-items: center; justify-content: center; padding: 0 4px; color: var(--accent); font-size: 20px; flex-shrink: 0; padding-top: 34px; }
+
+  /* SCHEDULE SECTION */
+  .schedule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .schedule-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .schedule-card:hover { border-color: var(--accent); }
+  .schedule-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .schedule-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .schedule-icon.daily { background: rgba(99,102,241,0.15); }
+  .schedule-icon.weekly { background: rgba(139,92,246,0.15); }
+  .schedule-icon.monthly { background: rgba(6,182,212,0.15); }
+  .schedule-name { font-size: 13px; font-weight: 700; }
+  .schedule-timing { font-size: 11px; color: var(--accent); font-weight: 600; }
+  .schedule-desc { font-size: 12px; color: var(--muted); }
+  .schedule-status {
+    position: absolute; top: 16px; right: 16px;
+    font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 6px;
+    background: rgba(16,185,129,0.15);
+    color: var(--green);
+  }
+  .cron-badge {
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface);
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  /* CHANNEL CATEGORIES */
+  .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .category-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex; align-items: center; gap: 14px;
+    transition: border-color 0.2s;
+  }
+  .category-card:hover { border-color: var(--border-bright); }
+  .category-bar-wrap { flex: 1; }
+  .category-label { font-size: 12px; font-weight: 600; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .category-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .category-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .category-icon { font-size: 22px; flex-shrink: 0; }
+
+  /* TOP CHANNELS */
+  .channels-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .table-header {
+    display: grid;
+    grid-template-columns: 32px 1fr 80px 60px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .table-row {
+    display: grid;
+    grid-template-columns: 32px 1fr 80px 60px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    font-size: 12px;
+    transition: background 0.15s;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: rgba(255,255,255,0.02); }
+  .rank { color: var(--muted); font-weight: 700; }
+  .channel-name { font-weight: 600; }
+  .video-count-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .video-count-bar-bg { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .video-count-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .video-count-num { color: var(--accent); font-weight: 700; text-align: right; }
+
+  /* TRANSCRIPT SAMPLES */
+  .transcript-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .transcript-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+  .transcript-card:hover { border-color: var(--border-bright); }
+  .transcript-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .transcript-title { font-size: 13px; font-weight: 600; line-height: 1.4; flex: 1; }
+  .transcript-channel { font-size: 11px; color: var(--accent); margin-top: 4px; }
+  .transcript-words { font-size: 11px; color: var(--muted); }
+  .word-pill {
+    padding: 2px 8px; border-radius: 8px;
+    font-size: 10px; font-weight: 700;
+    background: rgba(16,185,129,0.12);
+    color: var(--green);
+  }
+  .transcript-meta { margin-top: 8px; display: flex; align-items: center; gap: 10px; }
+
+  /* LOG MONITOR */
+  .log-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .log-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .log-name { font-family: var(--mono); font-size: 11px; color: var(--accent3); margin-bottom: 10px; }
+  .log-stat { display: flex; justify-content: space-between; font-size: 12px; margin-top: 4px; }
+  .log-stat .lbl { color: var(--muted); }
+  .log-stat .val { font-weight: 700; }
+
+  /* NOTEBOOKLM CARD */
+  .notebooklm-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .notebooklm-icon { font-size: 48px; flex-shrink: 0; }
+  .notebooklm-content { flex: 1; }
+  .notebooklm-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .notebooklm-desc { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+  .notebooklm-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  .notebooklm-link:hover { opacity: 0.85; }
+  .notebooklm-stats { display: flex; gap: 24px; margin-top: 20px; }
+  .notebooklm-stat-item { }
+  .notebooklm-stat-val { font-size: 22px; font-weight: 800; color: var(--accent); }
+  .notebooklm-stat-lbl { font-size: 11px; color: var(--muted); }
+
+  /* DONUT CHART */
+  .donut-wrap { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+  .donut-svg { transform: rotate(-90deg); }
+  .donut-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .donut-center-val { font-size: 22px; font-weight: 800; color: var(--text); }
+  .donut-center-lbl { font-size: 9px; color: var(--muted); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* RESPONSIVE TAGS */
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 6px;
+    font-size: 10px; font-weight: 600;
+    background: rgba(99,102,241,0.12);
+    color: var(--accent);
+    margin-right: 4px;
+  }
+  .tag.green { background: rgba(16,185,129,0.12); color: var(--green); }
+  .tag.yellow { background: rgba(245,158,11,0.12); color: var(--yellow); }
+  .tag.cyan { background: rgba(6,182,212,0.12); color: var(--accent3); }
+
+  /* MINI SPARKLINE */
+  .sparkline { display: flex; align-items: flex-end; gap: 2px; height: 24px; }
+  .spark-bar { width: 4px; background: var(--accent); border-radius: 1px; opacity: 0.6; }
+
+  /* TRANSCRIPT FILTER BUTTONS */
+  .ts-filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 13px;
+    border-radius: 7px;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    font-family: var(--font);
+    white-space: nowrap;
+  }
+  .ts-filter-btn:hover { border-color: var(--border-bright); color: var(--text); }
+  .ts-filter-btn.active { background: rgba(99,102,241,0.15); border-color: var(--accent); color: var(--accent); }
+
+  /* TRANSCRIPT CARDS */
+  .ts-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .ts-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.12); }
+  .ts-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .ts-card-title { font-size: 13px; font-weight: 700; line-height: 1.4; flex: 1; }
+  .ts-card-channel { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .ts-card-channel.karpathy { color: #f59e0b; }
+  .ts-card-channel.bluebrown { color: #6366f1; }
+  .ts-card-channel.deeplearning { color: #06b6d4; }
+  .ts-card-preview {
+    font-size: 11px; color: var(--muted); line-height: 1.6;
+    overflow: hidden; display: -webkit-box;
+    -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    font-family: var(--mono);
+  }
+  .ts-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .ts-word-badge {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 9px; border-radius: 7px;
+    background: rgba(16,185,129,0.1); color: var(--green);
+  }
+  .ts-card-actions { display: flex; gap: 6px; }
+  .ts-mini-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); padding: 4px 9px; border-radius: 6px;
+    font-size: 10px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; font-family: var(--font);
+  }
+  .ts-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HIGHLIGHT */
+  .ts-highlight { background: rgba(245,158,11,0.35); color: var(--text); border-radius: 2px; }
+
+  /* EXPORT BUTTONS */
+  .export-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font);
+  }
+  .export-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,102,241,0.08); }
+
+  /* PRODUCTION GRID */
+  .production-grid { display: flex; flex-direction: column; gap: 20px; }
+
+  .prod-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .prod-card:hover { border-color: var(--border-bright); }
+
+  .prod-card-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .prod-card-left { flex: 1; }
+  .prod-card-type {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 6px; display: inline-block; margin-bottom: 8px;
+  }
+  .prod-card-type.podcast { background: rgba(99,102,241,0.15); color: var(--accent); }
+  .prod-card-type.youtube { background: rgba(239,68,68,0.12); color: #f87171; }
+  .prod-card-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.3; margin-bottom: 6px; }
+  .prod-card-tagline { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  .prod-card-meta {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;
+  }
+  .prod-meta-chip {
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 7px;
+    background: var(--surface); color: var(--muted);
+  }
+  .prod-meta-chip.format { color: var(--accent3); }
+  .prod-meta-chip.duration { color: var(--yellow); }
+
+  .prod-card-actions { display: flex; gap: 8px; flex-shrink: 0; margin-top: 4px; }
+  .prod-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font);
+    white-space: nowrap;
+  }
+  .prod-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .prod-btn.copy-btn:active { background: rgba(99,102,241,0.15); }
+
+  .prod-card-body { padding: 0; }
+  .prod-accordion { border-bottom: 1px solid var(--border); }
+  .prod-accordion:last-child { border-bottom: none; }
+  .prod-accordion-header {
+    padding: 13px 24px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+    font-size: 12px; font-weight: 600;
+    color: var(--muted);
+    user-select: none;
+    transition: color 0.15s;
+  }
+  .prod-accordion-header:hover { color: var(--text); }
+  .prod-accordion-header .acc-icon { font-size: 14px; }
+  .prod-accordion-header .acc-arrow {
+    margin-left: auto; font-size: 10px;
+    transition: transform 0.2s;
+    color: var(--muted2);
+  }
+  .prod-accordion-header.open .acc-arrow { transform: rotate(180deg); }
+  .prod-accordion-body {
+    display: none; padding: 0 24px 16px;
+  }
+  .prod-accordion-body.open { display: block; }
+
+  /* Outline steps */
+  .outline-steps { display: flex; flex-direction: column; gap: 8px; }
+  .outline-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 12px;
+    background: var(--surface);
+    border-radius: 8px;
+  }
+  .outline-step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; flex-shrink: 0;
+  }
+  .outline-step-content { flex: 1; }
+  .outline-step-name { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .outline-step-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .outline-step-dur { font-size: 10px; color: var(--yellow); margin-top: 3px; font-weight: 600; }
+
+  /* Questions */
+  .questions-list { display: flex; flex-direction: column; gap: 6px; }
+  .question-item {
+    padding: 9px 12px;
+    background: var(--surface);
+    border-radius: 7px;
+    font-size: 12px; color: var(--text);
+    border-left: 2px solid var(--accent);
+  }
+
+  /* Sources */
+  .sources-list { display: flex; flex-direction: column; gap: 8px; }
+  .source-item {
+    padding: 10px 12px;
+    background: var(--surface);
+    border-radius: 8px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .source-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .source-title { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .source-channel { font-size: 10px; color: var(--accent); }
+  .source-insight { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
+  .source-link { font-size: 10px; color: var(--accent3); text-decoration: none; margin-top: 4px; display: inline-block; }
+  .source-link:hover { text-decoration: underline; }
+
+  /* Hook box */
+  .hook-box {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    font-style: italic;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* Thumbnail concept */
+  .thumbnail-box {
+    background: var(--surface);
+    border: 1px dashed var(--border-bright);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .thumbnail-preview {
+    width: 80px; height: 45px;
+    background: linear-gradient(135deg, #1e1e2a, #2a2a3a);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .thumbnail-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Copy feedback toast */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--green); color: white;
+    padding: 10px 20px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    transform: translateY(80px);
+    transition: transform 0.3s;
+    z-index: 999;
+  }
+  .toast.show { transform: translateY(0); }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--muted); font-size: 11px;
+    background: var(--surface);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-icon">🎬</div>
+    YouTube Intel Pipeline
+  </div>
+  <div class="header-meta">
+    <span><span class="status-dot"></span> &nbsp;Pipeline Active</span>
+    <span>258 channels monitored</span>
+    <span>Last run: May 21, 2026</span>
+    <span>Generated: <span id="gen-time"></span></span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <a class="sidebar-link active" href="#overview">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a class="sidebar-link" href="#pipeline">
+        <span class="icon">⚡</span> Pipeline Flow
+      </a>
+      <a class="sidebar-link" href="#schedules">
+        <span class="icon">🕐</span> Schedules
+        <span class="sidebar-badge">3</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Data</div>
+      <a class="sidebar-link" href="#channels">
+        <span class="icon">📺</span> Channels
+        <span class="sidebar-badge">258</span>
+      </a>
+      <a class="sidebar-link" href="#videos">
+        <span class="icon">🎥</span> Videos
+        <span class="sidebar-badge">1951</span>
+      </a>
+      <a class="sidebar-link" href="#transcripts">
+        <span class="icon">📝</span> Transcripts
+        <span class="sidebar-badge">31</span>
+      </a>
+      <a class="sidebar-link" href="#transcript-viewer">
+        <span class="icon">📄</span> Full Scripts
+        <span class="sidebar-badge" id="ts-sidebar-count">31</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Output</div>
+      <a class="sidebar-link" href="#notebooklm">
+        <span class="icon">🧠</span> NotebookLM
+      </a>
+      <a class="sidebar-link" href="#content">
+        <span class="icon">💡</span> Content Ideas
+      </a>
+      <a class="sidebar-link" href="#podcast-plans">
+        <span class="icon">🎙️</span> Podcast Plans
+        <span class="sidebar-badge" id="podcast-count">8</span>
+      </a>
+      <a class="sidebar-link" href="#youtube-plans">
+        <span class="icon">📹</span> YouTube Plans
+        <span class="sidebar-badge" id="yt-count">10</span>
+      </a>
+      <a class="sidebar-link" href="#logs">
+        <span class="icon">📋</span> System Logs
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- OVERVIEW STATS -->
+    <section class="section" id="overview">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Pipeline Overview</div>
+          <div class="section-sub">Real-time status across all pipeline modules · May 21, 2026</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span class="tag green">● Live</span>
+          <span class="tag">3 Schedules Active</span>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📺</div>
+          <div class="stat-label">Channels Monitored</div>
+          <div class="stat-value green">258</div>
+          <div class="stat-meta">of 300 cataloged · 42 unavailable</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎥</div>
+          <div class="stat-label">Videos Discovered</div>
+          <div class="stat-value accent">1,951</div>
+          <div class="stat-meta">today's fetch · 15 per channel avg</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-label">Transcripts Stored</div>
+          <div class="stat-value cyan">34</div>
+          <div class="stat-meta">extraction in progress · ~1.8K target</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div class="stat-label">Words Indexed</div>
+          <div class="stat-value yellow">100K+</div>
+          <div class="stat-meta">across 34 transcripts · avg 3K/video</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PIPELINE FLOW -->
+    <section class="section" id="pipeline">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Pipeline Flow</div>
+          <div class="section-sub">7-stage data pipeline from channel discovery to content generation</div>
+        </div>
+      </div>
+
+      <div class="pipeline-flow">
+        <div style="margin-bottom:20px;display:flex;align-items:center;gap:12px">
+          <span style="font-size:12px;color:var(--muted)">Data flow direction</span>
+          <span style="color:var(--accent);font-size:18px">→→→</span>
+          <span style="font-size:12px;color:var(--muted)">Each stage feeds the next</span>
+        </div>
+        <div class="flow-steps">
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">1</div>
+              <div class="flow-node-icon">📋</div>
+              <div class="flow-node-name">Channel Registry</div>
+              <div class="flow-node-script">channels.json</div>
+              <div class="flow-node-stat">258 active</div>
+            </div>
+          </div>
+
+          <div class="flow-connector">→</div>
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">2</div>
+              <div class="flow-node-icon">🔍</div>
+              <div class="flow-node-name">Fetch Videos</div>
+              <div class="flow-node-script">fetch_new_videos.py</div>
+              <div class="flow-node-stat">1,951 today</div>
+            </div>
+          </div>
+
+          <div class="flow-connector">→</div>
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">3</div>
+              <div class="flow-node-icon">🎤</div>
+              <div class="flow-node-name">Extract Transcripts</div>
+              <div class="flow-node-script">extract_transcripts.py</div>
+              <div class="flow-node-stat">34 stored</div>
+            </div>
+          </div>
+
+          <div class="flow-connector">→</div>
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">4</div>
+              <div class="flow-node-icon">📄</div>
+              <div class="flow-node-name">Format Sources</div>
+              <div class="flow-node-script">generate_notebooklm_sources.py</div>
+              <div class="flow-node-stat">Ready</div>
+            </div>
+          </div>
+
+          <div class="flow-connector">→</div>
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">5</div>
+              <div class="flow-node-icon">📊</div>
+              <div class="flow-node-name">Content Intelligence</div>
+              <div class="flow-node-script">content_intelligence.py</div>
+              <div class="flow-node-stat">Weekly brief</div>
+            </div>
+          </div>
+
+          <div class="flow-connector">→</div>
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">6</div>
+              <div class="flow-node-icon">💡</div>
+              <div class="flow-node-name">Content Ideas</div>
+              <div class="flow-node-script">generate_content_ideas.py</div>
+              <div class="flow-node-stat">Podcast + YT</div>
+            </div>
+          </div>
+
+          <div class="flow-connector">→</div>
+
+          <div class="flow-step">
+            <div class="flow-node active">
+              <div class="flow-node-num">7</div>
+              <div class="flow-node-icon">🧠</div>
+              <div class="flow-node-name">NotebookLM Upload</div>
+              <div class="flow-node-script">notebooklm_uploader.py</div>
+              <div class="flow-node-stat">e5f900c6...</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Tech stack row -->
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap">
+          <div style="font-size:11px;color:var(--muted)">Tech stack:</div>
+          <span class="tag cyan">yt-dlp</span>
+          <span class="tag cyan">youtube-transcript-api</span>
+          <span class="tag">Python 3.9</span>
+          <span class="tag">requests</span>
+          <span class="tag green">258 live channels</span>
+          <span class="tag yellow">browser-harness upload</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCHEDULES -->
+    <section class="section" id="schedules">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Scheduled Tasks</div>
+          <div class="section-sub">3 automated tasks — runs while Claude Code is open</div>
+        </div>
+        <span class="tag green">3 Active</span>
+      </div>
+
+      <div class="schedule-grid">
+        <div class="schedule-card">
+          <span class="schedule-status">Active</span>
+          <div class="schedule-card-header">
+            <div class="schedule-icon daily">⏰</div>
+            <div>
+              <div class="schedule-name">Daily Video Fetch</div>
+              <div class="schedule-timing">6:10 AM every day</div>
+            </div>
+          </div>
+          <div class="schedule-desc">Fetches latest videos from all 258 active channels via yt-dlp, extracts transcripts via youtube-transcript-api, generates NotebookLM source files.</div>
+          <div class="cron-badge">cron: 0 6 * * *</div>
+        </div>
+
+        <div class="schedule-card">
+          <span class="schedule-status">Active</span>
+          <div class="schedule-card-header">
+            <div class="schedule-icon weekly">📋</div>
+            <div>
+              <div class="schedule-name">Weekly Brief</div>
+              <div class="schedule-timing">Monday 8:07 AM</div>
+            </div>
+          </div>
+          <div class="schedule-desc">Analyzes 7 days of transcripts for trending topics. Generates podcast episode outlines and YouTube video ideas. Uploads sources to NotebookLM.</div>
+          <div class="cron-badge">cron: 0 8 * * 1</div>
+        </div>
+
+        <div class="schedule-card">
+          <span class="schedule-status">Active</span>
+          <div class="schedule-card-header">
+            <div class="schedule-icon monthly">📈</div>
+            <div>
+              <div class="schedule-name">Monthly Stats</div>
+              <div class="schedule-timing">1st of month 10 AM</div>
+            </div>
+          </div>
+          <div class="schedule-desc">Refreshes subscriber counts for all 300 cataloged channels. Flags breakout channels crossing 100K/500K/1M thresholds and tracks growth trends.</div>
+          <div class="cron-badge">cron: 0 10 1 * *</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CHANNEL BREAKDOWN -->
+    <section class="section" id="channels">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Channel Registry</div>
+          <div class="section-sub">300 channels across 6 categories · 258 active</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start">
+
+        <div class="category-grid">
+          <div class="category-card">
+            <div class="category-icon">🤖</div>
+            <div class="category-bar-wrap">
+              <div class="category-label">
+                <span>AI Technical</span>
+                <span style="color:var(--accent)">53</span>
+              </div>
+              <div class="category-bar-bg"><div class="category-bar" style="width:88%;background:linear-gradient(90deg,#6366f1,#8b5cf6)"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:4px">ML tutorials, research, deep learning</div>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <div class="category-icon">📰</div>
+            <div class="category-bar-wrap">
+              <div class="category-label">
+                <span>AI Vloggers</span>
+                <span style="color:var(--accent)">49</span>
+              </div>
+              <div class="category-bar-bg"><div class="category-bar" style="width:82%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:4px">Creators building with AI</div>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <div class="category-icon">💼</div>
+            <div class="category-bar-wrap">
+              <div class="category-label">
+                <span>Tech Business</span>
+                <span style="color:var(--accent)">44</span>
+              </div>
+              <div class="category-bar-bg"><div class="category-bar" style="width:73%;background:linear-gradient(90deg,#06b6d4,#0ea5e9)"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:4px">SaaS, product, strategy</div>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <div class="category-icon">📡</div>
+            <div class="category-bar-wrap">
+              <div class="category-label">
+                <span>AI News</span>
+                <span style="color:var(--accent)">42</span>
+              </div>
+              <div class="category-bar-bg"><div class="category-bar" style="width:70%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:4px">Product launches, commentary</div>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <div class="category-icon">🚀</div>
+            <div class="category-bar-wrap">
+              <div class="category-label">
+                <span>Startup / VC</span>
+                <span style="color:var(--accent)">35</span>
+              </div>
+              <div class="category-bar-bg"><div class="category-bar" style="width:58%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:4px">Founders, fundraising, VC</div>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <div class="category-icon">🎙️</div>
+            <div class="category-bar-wrap">
+              <div class="category-label">
+                <span>Tech Podcasts</span>
+                <span style="color:var(--accent)">35</span>
+              </div>
+              <div class="category-bar-bg"><div class="category-bar" style="width:58%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+              <div style="font-size:10px;color:var(--muted);margin-top:4px">Lex Fridman, All-In, Acquired</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DONUT -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center">
+          <div style="font-size:12px;font-weight:600;margin-bottom:16px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Resolution Status</div>
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120" style="display:block;margin:0 auto 12px">
+            <!-- Background circle -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#1e1e2a" stroke-width="12"/>
+            <!-- Resolved (258/300 = 86%) -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#6366f1" stroke-width="12"
+              stroke-dasharray="271 43" stroke-linecap="round"/>
+            <!-- Unavailable (42/300 = 14%) -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#ef4444" stroke-width="12"
+              stroke-dasharray="43 271" stroke-dashoffset="-271" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+          <div style="font-size:28px;font-weight:800;color:var(--accent);margin-top:-4px">86%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">ID Resolution Rate</div>
+          <div style="display:flex;justify-content:center;gap:20px;margin-top:16px">
+            <div style="text-align:center">
+              <div style="font-size:18px;font-weight:800;color:var(--green)">258</div>
+              <div style="font-size:10px;color:var(--muted)">Active</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:18px;font-weight:800;color:var(--red)">42</div>
+              <div style="font-size:10px;color:var(--muted)">Unavailable</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TOP CHANNELS TABLE -->
+    <section class="section" id="videos">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Top Channels — Today's Fetch</div>
+          <div class="section-sub">1,951 videos fetched · 15 per channel (configurable)</div>
+        </div>
+        <span class="tag cyan">May 21, 2026</span>
+      </div>
+
+      <div class="channels-table">
+        <div class="table-header">
+          <div>#</div>
+          <div>Channel</div>
+          <div>Videos</div>
+          <div style="text-align:right">Count</div>
+        </div>
+        <div id="channels-table-body"></div>
+      </div>
+    </section>
+
+    <!-- TRANSCRIPTS -->
+    <section class="section" id="transcripts">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Transcript Library</div>
+          <div class="section-sub">34 transcripts stored · extraction in progress for 1,917 more</div>
+        </div>
+      </div>
+
+      <div class="transcript-grid" id="transcript-cards"></div>
+
+      <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">⚡ Extraction Progress</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <div>
+            <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Stored</div>
+            <div style="font-size:24px;font-weight:800;color:var(--green)">34</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Pending</div>
+            <div style="font-size:24px;font-weight:800;color:var(--yellow)">~1,917</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Method</div>
+            <div style="font-size:13px;font-weight:700;color:var(--accent3);margin-top:4px">youtube-transcript-api</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Auth</div>
+            <div style="font-size:13px;font-weight:700;color:var(--yellow);margin-top:4px">⚠ No cookies.txt</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:1.8%;background:linear-gradient(90deg,var(--green),var(--accent3));border-radius:4px;transition:width 1s"></div>
+        </div>
+        <div style="margin-top:6px;font-size:10px;color:var(--muted)">34 / 1,951 complete (1.8%) — add config/cookies.txt to accelerate extraction</div>
+      </div>
+    </section>
+
+    <!-- NOTEBOOKLM -->
+    <section class="section" id="notebooklm">
+      <div class="section-header">
+        <div>
+          <div class="section-title">NotebookLM Integration</div>
+          <div class="section-sub">Transcripts → structured sources → AI audio overview generation</div>
+        </div>
+      </div>
+
+      <div class="notebooklm-card">
+        <div class="notebooklm-icon">🧠</div>
+        <div class="notebooklm-content">
+          <div class="notebooklm-title">Google NotebookLM Notebook</div>
+          <div class="notebooklm-desc">
+            Formatted transcript source files are automatically generated and uploaded to your NotebookLM notebook every Monday morning.
+            NotebookLM synthesizes hundreds of creator transcripts into structured audio overviews, key themes, and deep-dive Q&A —
+            giving you a weekly AI-synthesized briefing on what the entire AI/startup YouTube ecosystem is talking about.
+          </div>
+          <a class="notebooklm-link" href="https://notebooklm.google.com/notebook/e5f900c6-6aec-46c6-8bba-a9a694af57cc" target="_blank">
+            Open Notebook →
+          </a>
+          <div class="notebooklm-stats">
+            <div class="notebooklm-stat-item">
+              <div class="notebooklm-stat-val">3</div>
+              <div class="notebooklm-stat-lbl">Source files ready</div>
+            </div>
+            <div class="notebooklm-stat-item">
+              <div class="notebooklm-stat-val">20</div>
+              <div class="notebooklm-stat-lbl">Max per upload batch</div>
+            </div>
+            <div class="notebooklm-stat-item">
+              <div class="notebooklm-stat-val">Mon 8am</div>
+              <div class="notebooklm-stat-lbl">Next auto-upload</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT IDEAS -->
+    <section class="section" id="content">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Content Generation Engine</div>
+          <div class="section-sub">Weekly podcast + YouTube ideas from transcript analysis</div>
+        </div>
+        <span class="tag yellow">Runs Monday 8am</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <span style="font-size:24px">🎙️</span>
+            <div>
+              <div style="font-size:14px;font-weight:700">Podcast Episodes</div>
+              <div style="font-size:11px;color:var(--muted)">Deep-dive episodes with creator source clips</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:var(--surface);border-radius:8px;padding:12px">
+              <div style="font-size:11px;font-weight:600;color:var(--accent);margin-bottom:4px">Format</div>
+              <div style="font-size:12px;color:var(--muted)">Topic cluster → multi-source synthesis → 20-30 min episode outline with talking points</div>
+            </div>
+            <div style="background:var(--surface);border-radius:8px;padding:12px">
+              <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:4px">Output</div>
+              <div style="font-size:12px;color:var(--muted)">outputs/content_plan_YYYYMMDD.md with 10 episode ideas + source citations</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <span style="font-size:24px">📹</span>
+            <div>
+              <div style="font-size:14px;font-weight:700">YouTube Videos</div>
+              <div style="font-size:11px;color:var(--muted)">Reaction, explainer, roundup formats</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:var(--surface);border-radius:8px;padding:12px">
+              <div style="font-size:11px;font-weight:600;color:var(--accent);margin-bottom:4px">Format</div>
+              <div style="font-size:12px;color:var(--muted)">Trending topic → hook → 5-part structure → 8-20 min video concept with source channels</div>
+            </div>
+            <div style="background:var(--surface);border-radius:8px;padding:12px">
+              <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:4px">Output</div>
+              <div style="font-size:12px;color:var(--muted)">15 video ideas + trend analysis + trending_topics_count in weekly JSON</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Intelligence pipeline -->
+      <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:14px">Analysis Pipeline</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div style="background:var(--surface);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">📂 Transcripts</div>
+          <span style="color:var(--accent)">→</span>
+          <div style="background:var(--surface);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">🔠 TF-IDF Keywords</div>
+          <span style="color:var(--accent)">→</span>
+          <div style="background:var(--surface);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">📊 Topic Clusters</div>
+          <span style="color:var(--accent)">→</span>
+          <div style="background:var(--surface);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">💡 Idea Generation</div>
+          <span style="color:var(--accent)">→</span>
+          <div style="background:var(--surface);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--green)">📝 Content Plan</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL TRANSCRIPT VIEWER -->
+    <section class="section" id="transcript-viewer">
+      <div class="section-header">
+        <div>
+          <div class="section-title">📄 Full Video Transcripts</div>
+          <div class="section-sub">31 complete scripts from top AI/startup channels — search, read, copy</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="tag green" id="ts-loaded-count">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Search + Filter bar -->
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px;position:relative">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px">🔍</span>
+          <input id="ts-search" type="text" placeholder="Search transcripts by title, channel, or keyword…"
+            style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);
+                   padding:10px 12px 10px 36px;border-radius:8px;font-size:13px;font-family:var(--font);outline:none;"
+            oninput="filterTranscripts()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="ts-filter-btn active" data-channel="all" onclick="setChannelFilter('all',this)">All</button>
+          <button class="ts-filter-btn" data-channel="Andrej Karpathy" onclick="setChannelFilter('Andrej Karpathy',this)">Karpathy</button>
+          <button class="ts-filter-btn" data-channel="3Blue1Brown" onclick="setChannelFilter('3Blue1Brown',this)">3B1B</button>
+          <button class="ts-filter-btn" data-channel="DeepLearning.AI" onclick="setChannelFilter('DeepLearning.AI',this)">DL.AI</button>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:11px;color:var(--muted)">Sort:</span>
+          <button class="ts-filter-btn active" id="sort-words" onclick="sortTranscripts('words',this)">Longest</button>
+          <button class="ts-filter-btn" id="sort-alpha" onclick="sortTranscripts('alpha',this)">A–Z</button>
+        </div>
+      </div>
+
+      <!-- Transcript cards grid -->
+      <div id="ts-card-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+
+      <!-- Full transcript modal -->
+      <div id="ts-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px)" onclick="closeTsModal(event)">
+        <div id="ts-modal-inner" style="position:absolute;top:5vh;left:50%;transform:translateX(-50%);
+             width:min(820px,94vw);max-height:90vh;background:var(--card);border:1px solid var(--border-bright);
+             border-radius:16px;overflow:hidden;display:flex;flex-direction:column">
+          <!-- Modal header -->
+          <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <div style="flex:1">
+                <div id="ts-modal-channel" style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:5px"></div>
+                <div id="ts-modal-title" style="font-size:17px;font-weight:800;letter-spacing:-0.3px;line-height:1.3"></div>
+                <div id="ts-modal-meta" style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap"></div>
+              </div>
+              <button onclick="closeTsModal()" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);
+                     padding:6px 10px;border-radius:7px;cursor:pointer;font-size:16px;flex-shrink:0">✕</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+              <button class="prod-btn" style="font-size:12px;padding:7px 16px" onclick="copyModalTranscript()">📋 Copy Full Transcript</button>
+              <button class="prod-btn" style="font-size:12px;padding:7px 16px" onclick="exportModalTranscript()">⬇ Export .txt</button>
+              <button class="prod-btn" style="font-size:12px;padding:7px 16px" onclick="copyModalTranscript('plain')">📝 Copy Plain Text</button>
+              <a id="ts-modal-yt-link" href="#" target="_blank" class="prod-btn" style="font-size:12px;padding:7px 16px;text-decoration:none">▶ Watch on YouTube</a>
+            </div>
+          </div>
+          <!-- Search within transcript -->
+          <div style="padding:12px 24px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface)">
+            <input id="ts-in-search" type="text" placeholder="Search within this transcript…"
+              style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);
+                     padding:8px 12px;border-radius:7px;font-size:12px;font-family:var(--font);outline:none;"
+              oninput="highlightInTranscript()" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <span id="ts-match-count" style="font-size:11px;color:var(--muted);margin-top:5px;display:block"></span>
+          </div>
+          <!-- Transcript body -->
+          <div id="ts-modal-body" style="overflow-y:auto;padding:20px 24px;flex:1;line-height:1.8;font-size:13px;color:var(--text);white-space:pre-wrap;word-break:break-word;font-family:var(--mono)"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PODCAST PRODUCTION PLANS -->
+    <section class="section" id="podcast-plans">
+      <div class="section-header">
+        <div>
+          <div class="section-title">🎙️ Podcast Production Plans</div>
+          <div class="section-sub">Full episode outlines generated from transcript analysis — ready to record</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="export-btn" onclick="exportAll('podcast')">⬇ Export All</button>
+          <button class="export-btn" onclick="copyAll('podcast')">📋 Copy All</button>
+        </div>
+      </div>
+      <div id="podcast-plans-container" class="production-grid"></div>
+    </section>
+
+    <!-- YOUTUBE PRODUCTION PLANS -->
+    <section class="section" id="youtube-plans">
+      <div class="section-header">
+        <div>
+          <div class="section-title">📹 YouTube Video Production Plans</div>
+          <div class="section-sub">Full video scripts + structure generated from transcript analysis — ready to film</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="export-btn" onclick="exportAll('youtube')">⬇ Export All</button>
+          <button class="export-btn" onclick="copyAll('youtube')">📋 Copy All</button>
+        </div>
+      </div>
+      <div id="youtube-plans-container" class="production-grid"></div>
+    </section>
+
+    <!-- LOGS -->
+    <section class="section" id="logs">
+      <div class="section-header">
+        <div>
+          <div class="section-title">System Logs</div>
+          <div class="section-sub">Live pipeline execution logs</div>
+        </div>
+      </div>
+
+      <div class="log-grid">
+        <div class="log-card">
+          <div class="log-name">fetch_videos.log</div>
+          <div class="log-stat"><span class="lbl">Lines</span><span class="val" style="color:var(--accent)">176</span></div>
+          <div class="log-stat"><span class="lbl">Size</span><span class="val">41.0 KB</span></div>
+          <div class="log-stat"><span class="lbl">Status</span><span class="val" style="color:var(--green)">Active</span></div>
+        </div>
+        <div class="log-card">
+          <div class="log-name">extract_transcripts.log</div>
+          <div class="log-stat"><span class="lbl">Lines</span><span class="val" style="color:var(--accent)">240</span></div>
+          <div class="log-stat"><span class="lbl">Size</span><span class="val">17.1 KB</span></div>
+          <div class="log-stat"><span class="lbl">Status</span><span class="val" style="color:var(--yellow)">In progress</span></div>
+        </div>
+        <div class="log-card">
+          <div class="log-name">notebooklm.log</div>
+          <div class="log-stat"><span class="lbl">Lines</span><span class="val" style="color:var(--accent)">1</span></div>
+          <div class="log-stat"><span class="lbl">Size</span><span class="val">0.0 KB</span></div>
+          <div class="log-stat"><span class="lbl">Status</span><span class="val" style="color:var(--muted)">Idle</span></div>
+        </div>
+      </div>
+
+      <!-- Action needed -->
+      <div style="margin-top:16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:20px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <span style="font-size:24px;flex-shrink:0">⚠️</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--yellow);margin-bottom:6px">Action Required — Add cookies.txt for Full Transcript Coverage</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7">
+              youtube-transcript-api gets IP-blocked after ~20 requests without authentication.
+              To extract all 1,951 transcripts without interruption:<br>
+              1. Install the <strong style="color:var(--text)">"Get cookies.txt LOCALLY"</strong> Chrome extension<br>
+              2. Visit youtube.com while signed in<br>
+              3. Export cookies → save to <code style="background:var(--surface);padding:1px 6px;border-radius:4px;color:var(--accent3)">~/Documents/Claude/youtube-intel-pipeline/config/cookies.txt</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>YouTube Intelligence Pipeline · Built with MOP v4.6.1 · Claude Code</div>
+  <div>300 channels · 258 active · 3 scheduled tasks · NotebookLM e5f900c6</div>
+</footer>
+
+<script>
+// Live data
+const TOP_CHANNELS = [
+  "3Blue1Brown","Andrej Karpathy","DeepLearning.AI","Yannic Kilcher",
+  "StatQuest with Josh Starmer","Sentdex","Krish Naik","Siraj Raval",
+  "freeCodeCamp.org","Corey Schafer","Tech With Tim","Computerphile",
+  "MIT OpenCourseWare","Stanford Online","Hugging Face","Umar Jamil",
+  "Aladdin Persson","deeplizard","CodeEmporium","Daniel Bourke"
+];
+
+const TRANSCRIPTS = [
+  {title:"What was Euclid really doing?",channel:"3Blue1Brown",words:5634,vid:"M-MgQC6z3VU"},
+  {title:"How I use LLMs",channel:"Andrej Karpathy",words:25287,vid:"EWvNQjAaOHw"},
+  {title:"Let's build the GPT Tokenizer",channel:"Andrej Karpathy",words:24679,vid:"zduSFxRajkE"},
+  {title:"The spelled-out intro to neural networks and backpropagation",channel:"Andrej Karpathy",words:24352,vid:"VMj-3S1tku0"},
+  {title:"Building makemore Part 4: Becoming a Backprop Ninja",channel:"Andrej Karpathy",words:20776,vid:"q8SA3rM6ckI"},
+  {title:"The most beautiful formula not enough people understand",channel:"3Blue1Brown",words:4890,vid:"spl"},
+];
+
+// Render channels table
+const tbody = document.getElementById('channels-table-body');
+TOP_CHANNELS.forEach((name, i) => {
+  const row = document.createElement('div');
+  row.className = 'table-row';
+  row.innerHTML = `
+    <div class="rank">${i+1}</div>
+    <div class="channel-name">${name}</div>
+    <div class="video-count-bar-wrap">
+      <div class="video-count-bar-bg">
+        <div class="video-count-bar" style="width:100%"></div>
+      </div>
+    </div>
+    <div class="video-count-num">15</div>
+  `;
+  tbody.appendChild(row);
+});
+
+// Render transcript cards
+const tcards = document.getElementById('transcript-cards');
+TRANSCRIPTS.forEach(t => {
+  const card = document.createElement('div');
+  card.className = 'transcript-card';
+  const wordK = t.words >= 1000 ? (t.words/1000).toFixed(1)+'K' : t.words;
+  card.innerHTML = `
+    <div class="transcript-card-header">
+      <div>
+        <div class="transcript-title">${t.title}</div>
+        <div class="transcript-channel">@${t.channel}</div>
+      </div>
+    </div>
+    <div class="transcript-meta">
+      <span class="word-pill">${wordK} words</span>
+      <a href="https://youtube.com/watch?v=${t.vid}" target="_blank" style="font-size:11px;color:var(--muted);text-decoration:none">▶ Watch</a>
+    </div>
+  `;
+  tcards.appendChild(card);
+});
+
+// Set gen time
+document.getElementById('gen-time').textContent = new Date().toLocaleTimeString();
+
+// Sidebar scroll spy
+const sections = document.querySelectorAll('.section');
+const links = document.querySelectorAll('.sidebar-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+});
+
+// Animate bars on load
+setTimeout(() => {
+  document.querySelectorAll('.category-bar').forEach(b => {
+    const w = b.style.width; b.style.width = '0';
+    setTimeout(() => b.style.width = w, 100);
+  });
+}, 200);
+
+// ============================================================
+// TRANSCRIPT VIEWER
+// ============================================================
+
+let TS_INDEX = [];          // lightweight index (title, channel, words, preview)
+let TS_CACHE = {};          // full transcript cache: video_id → full text
+let TS_FILTER_CHANNEL = 'all';
+let TS_SORT = 'words';
+let TS_SEARCH = '';
+let TS_MODAL_VIDEO = null;  // currently open transcript
+
+function channelClass(channel) {
+  if (channel === 'Andrej Karpathy') return 'karpathy';
+  if (channel === '3Blue1Brown') return 'bluebrown';
+  return 'deeplearning';
+}
+
+function channelEmoji(channel) {
+  if (channel === 'Andrej Karpathy') return '🧠';
+  if (channel === '3Blue1Brown') return '📐';
+  return '🎓';
+}
+
+function wordLabel(n) {
+  return n >= 1000 ? (n/1000).toFixed(1)+'K words' : n+' words';
+}
+
+// Load index on startup
+async function loadTranscriptIndex() {
+  try {
+    const r = await fetch('transcripts_index.json');
+    TS_INDEX = await r.json();
+    document.getElementById('ts-loaded-count').textContent = TS_INDEX.length + ' transcripts';
+    document.getElementById('ts-sidebar-count').textContent = TS_INDEX.length;
+    renderTranscriptCards();
+  } catch(e) {
+    // If served directly as file://, fetch won't work — embed minimal index
+    document.getElementById('ts-loaded-count').textContent = 'Run via serve.sh for full loading';
+    document.getElementById('ts-card-grid').innerHTML = `
+      <div style="grid-column:1/-1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center;color:var(--muted)">
+        <div style="font-size:24px;margin-bottom:12px">ℹ️</div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">Run dashboard via local server to load transcripts</div>
+        <div style="font-size:12px;color:var(--muted2)">cd ~/Documents/Claude/youtube-intel-pipeline/dashboard && python3 -m http.server 8765</div>
+        <div style="margin-top:12px;font-size:11px;color:var(--muted2)">Then open <span style="color:var(--accent3)">http://localhost:8765</span></div>
+      </div>`;
+  }
+}
+
+function renderTranscriptCards() {
+  let data = [...TS_INDEX];
+
+  // Channel filter
+  if (TS_FILTER_CHANNEL !== 'all')
+    data = data.filter(t => t.channel === TS_FILTER_CHANNEL);
+
+  // Search filter
+  const q = TS_SEARCH.toLowerCase().trim();
+  if (q) {
+    data = data.filter(t =>
+      t.title.toLowerCase().includes(q) ||
+      t.channel.toLowerCase().includes(q) ||
+      (t.preview || '').toLowerCase().includes(q)
+    );
+  }
+
+  // Sort
+  if (TS_SORT === 'words') data.sort((a,b) => b.words - a.words);
+  else data.sort((a,b) => a.title.localeCompare(b.title));
+
+  const grid = document.getElementById('ts-card-grid');
+  if (!data.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No transcripts match your search</div>`;
+    return;
+  }
+
+  grid.innerHTML = data.map(t => `
+    <div class="ts-card" onclick="openTranscript('${t.video_id}')">
+      <div class="ts-card-header">
+        <div style="flex:1">
+          <div class="ts-card-channel ${channelClass(t.channel)}">${channelEmoji(t.channel)} ${t.channel}</div>
+          <div class="ts-card-title">${escHtml(t.title)}</div>
+        </div>
+        <span class="ts-word-badge">${wordLabel(t.words)}</span>
+      </div>
+      <div class="ts-card-preview">${escHtml((t.preview||'').slice(0,200))}…</div>
+      <div class="ts-card-footer">
+        <a href="${t.url}" target="_blank" onclick="event.stopPropagation()"
+           style="font-size:11px;color:var(--accent3);text-decoration:none">▶ YouTube</a>
+        <div class="ts-card-actions">
+          <button class="ts-mini-btn" onclick="event.stopPropagation();quickCopyTranscript('${t.video_id}','${escHtml(t.title).replace(/'/g,"\\'")}')">📋 Copy</button>
+          <button class="ts-mini-btn" onclick="event.stopPropagation();openTranscript('${t.video_id}')">📄 Full View</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterTranscripts() {
+  TS_SEARCH = document.getElementById('ts-search').value;
+  renderTranscriptCards();
+}
+
+function setChannelFilter(channel, btn) {
+  TS_FILTER_CHANNEL = channel;
+  document.querySelectorAll('.ts-filter-btn[data-channel]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTranscriptCards();
+}
+
+function sortTranscripts(mode, btn) {
+  TS_SORT = mode;
+  document.querySelectorAll('#sort-words,#sort-alpha').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTranscriptCards();
+}
+
+// Load full transcript (lazy) and open modal
+function updateModalMeta(meta) {
+  const klass = channelClass(meta.channel);
+  const colorTag = klass === 'karpathy' ? 'yellow' : klass === 'bluebrown' ? '' : 'cyan';
+  const kbLabel = meta.chars ? `${(meta.chars/1024).toFixed(0)} KB` : '…';
+  document.getElementById('ts-modal-meta').innerHTML = `
+    <span class="tag ${colorTag}">${wordLabel(meta.words)}</span>
+    <span class="tag cyan">${kbLabel}</span>
+    ${meta.published ? `<span class="tag">${meta.published.slice(0,10)}</span>` : ''}`;
+}
+
+async function openTranscript(videoId) {
+  const meta = TS_INDEX.find(t => t.video_id === videoId);
+  if (!meta) return;
+
+  TS_MODAL_VIDEO = meta;
+
+  // Show modal immediately with what we know
+  document.getElementById('ts-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  document.getElementById('ts-modal-channel').textContent = `${channelEmoji(meta.channel)} ${meta.channel}`;
+  document.getElementById('ts-modal-title').textContent = meta.title;
+  document.getElementById('ts-modal-yt-link').href = meta.url;
+  updateModalMeta(meta);
+  document.getElementById('ts-modal-body').textContent = 'Loading transcript…';
+  document.getElementById('ts-in-search').value = '';
+  document.getElementById('ts-match-count').textContent = '';
+
+  // Fetch full transcript (lazy, cached)
+  if (!TS_CACHE[videoId]) {
+    try {
+      const r = await fetch(`transcripts/${videoId}.json`);
+      const data = await r.json();
+      TS_CACHE[videoId] = data.transcript;
+      meta.chars = data.transcript.length;
+      updateModalMeta(meta); // refresh KB now that we have it
+    } catch(e) {
+      TS_CACHE[videoId] = (meta.preview || '') + '\n\n[Full transcript unavailable — run dashboard via: cd dashboard && python3 -m http.server 8780]';
+    }
+  }
+
+  renderModalTranscript();
+}
+
+function renderModalTranscript() {
+  if (!TS_MODAL_VIDEO) return;
+  const body = document.getElementById('ts-modal-body');
+  const text = TS_CACHE[TS_MODAL_VIDEO.video_id] || '';
+  const q = document.getElementById('ts-in-search').value.trim();
+
+  if (q) {
+    const re = new RegExp(escRegex(q), 'gi');
+    const rawMatches = text.match(re) || [];
+    document.getElementById('ts-match-count').textContent =
+      rawMatches.length ? `${rawMatches.length} match${rawMatches.length!==1?'es':''} for "${q}"` : `No matches for "${q}"`;
+    // Build highlighted HTML — escape first, then replace escaped markers
+    const escaped = escHtml(text);
+    const escapedQ = escHtml(q);
+    const reEscaped = new RegExp(escRegex(escapedQ), 'gi');
+    body.innerHTML = escaped.replace(reEscaped, m => `<mark class="ts-highlight">${m}</mark>`);
+    // Scroll modal body to first highlight
+    const first = body.querySelector('.ts-highlight');
+    if (first) {
+      // Use offsetTop relative to the scrollable body container
+      body.scrollTop = first.offsetTop - 80;
+    }
+  } else {
+    document.getElementById('ts-match-count').textContent = '';
+    body.textContent = text;
+    body.scrollTop = 0;
+  }
+}
+
+function highlightInTranscript() { renderModalTranscript(); }
+
+function closeTsModal(e) {
+  if (e && e.target !== document.getElementById('ts-modal')) return;
+  document.getElementById('ts-modal').style.display = 'none';
+  document.body.style.overflow = '';
+  TS_MODAL_VIDEO = null;
+}
+
+function copyModalTranscript(mode) {
+  if (!TS_MODAL_VIDEO) return;
+  const text = TS_CACHE[TS_MODAL_VIDEO.video_id] || '';
+  const meta = TS_MODAL_VIDEO;
+
+  let output;
+  if (mode === 'plain') {
+    output = text;
+  } else {
+    output = `VIDEO TRANSCRIPT
+${meta.title}
+Channel: ${meta.channel}
+URL: ${meta.url}
+Words: ${meta.words.toLocaleString()}
+${'─'.repeat(60)}
+
+${text}`;
+  }
+  navigator.clipboard.writeText(output).then(() => showToast('✓ Transcript copied!'));
+}
+
+function exportModalTranscript() {
+  if (!TS_MODAL_VIDEO) return;
+  const text = TS_CACHE[TS_MODAL_VIDEO.video_id] || '';
+  const meta = TS_MODAL_VIDEO;
+  const filename = `transcript_${meta.title.slice(0,40).replace(/[^a-z0-9]/gi,'_').toLowerCase()}.txt`;
+  const content = `VIDEO TRANSCRIPT\n${meta.title}\nChannel: ${meta.channel}\nURL: ${meta.url}\nWords: ${meta.words.toLocaleString()}\n${'─'.repeat(60)}\n\n${text}`;
+  const blob = new Blob([content], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  showToast('✓ Transcript exported!');
+}
+
+async function quickCopyTranscript(videoId, title) {
+  if (!TS_CACHE[videoId]) {
+    const meta = TS_INDEX.find(t => t.video_id === videoId);
+    try {
+      const r = await fetch(`transcripts/${videoId}.json`);
+      const data = await r.json();
+      TS_CACHE[videoId] = data.transcript;
+    } catch(e) {
+      TS_CACHE[videoId] = (meta && meta.preview) || '[unavailable]';
+    }
+  }
+  const text = TS_CACHE[videoId];
+  await navigator.clipboard.writeText(text);
+  showToast(`✓ "${title.slice(0,30)}…" copied!`);
+}
+
+// Helpers
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Init transcript viewer on load
+loadTranscriptIndex();
+
+// ============================================================
+// PRODUCTION PLANS DATA
+// ============================================================
+const PODCAST_PLANS = [{"title":"How Andrej Karpathy Would Explain AI to Your CEO","tagline":"The mental models every business leader needs to stop treating LLMs like magic and start treating them like infrastructure.","format":"solo","duration_min":35,"hook":"Andrej Karpathy has spent the last two years making a series of videos that I think are secretly the most important business documents in tech right now. Not because they teach you to code — they don't — but because they give you the mental model that separates the people making good AI decisions from the people making expensive mistakes. Today I'm going to synthesize the key ideas from his deep dive into LLMs and his 'How I Use LLMs' video, and translate them into frameworks you can use as a founder or operator. Let's go.","outline":[{"name":"The Two-File Mental Model","desc":"Karpathy's framing from his 1-hour LLM intro: an LLM is literally just two files — a parameters file and a run file. Llama 2 70B is 140GB and 500 lines of C. No internet required. What this means for enterprise deployment, data residency, and vendor lock-in. The difference between model inference (cheap, fast) and model training (expensive, months-long). Business implication: the 'moat' in AI is the training data and RLHF process, not the inference infrastructure.","dur":"7 min"},{"name":"The Lossy Zip File: What LLMs Actually Know","desc":"Karpathy's 'lossy compression' framing — 10TB of internet compressed into 140GB. The knowledge cutoff problem: GPT-4 was pre-trained months before you're using it. Why the model 'knows' things probabilistically, not factually. The hallucination root cause: the model is completing sequences, not looking things up. Business implication: why grounding via RAG or search tools is not optional for production apps.","dur":"6 min"},{"name":"Context Window as Working Memory","desc":"Karpathy's token stream mental model: every conversation is a 1D sequence of tokens being built collaboratively. New chat = reset to zero. The context window IS the working memory — anything outside it doesn't exist for the model. What this means for enterprise applications: session design, memory architecture, and why chatbots that 'forget' aren't bugs, they're the model working as designed.","dur":"5 min"},{"name":"RLHF and the Assistant vs. the Base Model","desc":"The three-stage pipeline Karpathy describes: pre-training (internet compression), supervised fine-tuning (conversation examples), reinforcement learning from human feedback (preference optimization). Why the base model is a 'document simulator' and the assistant is a different beast on top of it. The 'jailbreak' framing: you're essentially trying to invoke the base model's internet simulator rather than the assistant persona. Business implication: what you're actually buying when you pay for GPT-4 vs. GPT-4 base.","dur":"6 min"},{"name":"The Tool Use Revolution","desc":"Karpathy's demo of the shift from 'model in your head' to 'model plus tools.' Web search, code interpreter, deep research. The deep research capability as a new category: 10-minute research agents that synthesize 27 sources. His explicit comparison of ChatGPT vs. Perplexity vs. Grok for different query types. Business implication: the LLM alone is table stakes; the tool ecosystem is where the ROI lives.","dur":"5 min"},{"name":"Practical Usage Patterns for Builders","desc":"Karpathy's actual workflow: Perplexity for search-answerable queries, Deep Research for synthesis tasks, Claude for document analysis, ChatGPT for coding. Reading books with LLMs as a co-reader. The 'don't read alone' principle. How he uses file uploads to load papers and books into context. Business implication: the 80/20 of personal productivity with LLMs for technical founders.","dur":"4 min"},{"name":"The Enterprise Quality Gap (Cross-reference: Tom Howlett)","desc":"CMU study on Cursor usage at enterprises: 3-5x velocity spike in month 1, complexity and static analysis warnings both increase, velocity collapses by month 3. The 'enterprise quality gap' — LLM code is great for <50K line internal tools but not for mission-critical production apps. What the SDLC needs to adapt. Connecting Karpathy's vision of AI-assisted coding to the real-world enterprise deployment challenges.","dur":"4 min"}],"key_questions":["What's the mental model that most clearly separates people who use LLMs well from those who use them poorly?","Why does every production LLM application need grounding tools, and what's the minimal viable architecture?","What does the three-stage training pipeline (pretraining, SFT, RLHF) mean for how you should evaluate and prompt models?","When does AI-generated code become a liability rather than an asset, and how do you know when you've crossed that line?","What's the difference between how Karpathy uses LLMs personally versus how he'd architect a production system?"],"sources":[{"title":"Deep Dive into LLMs like ChatGPT","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=7xTGNNLPyMI","insight":"Three-stage pipeline (pre-training, SFT, RLHF), the 'lossy zip file' mental model, tokenization as BPE compression, context window as working memory"},{"title":"How I use LLMs","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=EWvNQjAaOHw","insight":"Practical taxonomy of query types, deep research as a new category, reading books with LLMs, tool ecosystem beats model alone"},{"title":"[1hr Talk] Intro to Large Language Models","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=zjkBMFhNj_g","insight":"Two-file mental model (params + run.c), Llama 2 70B architecture overview, base model vs assistant distinction, future of LLM agents"},{"title":"AI Dev 26 x SF | Tom Howlett: Can LLMs Generate Enterprise Quality Code?","channel":"DeepLearning.AI","url":"https://www.youtube.com/watch?v=Z_pCTBtCmck","insight":"CMU Cursor study showing velocity collapse by month 3, enterprise quality gap definition, why SDLC hasn't adapted to LLM-generated code"}],"guests":["A CTO or VP Engineering from a company that has gone from vibe-coding to production AI — someone with a war story about the quality gap","A researcher from Hugging Face or EleutherAI who works on open-weights models and can speak to the practical differences between open vs. closed training pipelines","An enterprise AI architect who has implemented RAG and grounding systems at scale and can talk about what the actual deployment stack looks like"],"cta":"If you found this useful, the homework assignment is simple: go watch Karpathy's Deep Dive into LLMs — the link is in the show notes. It's three hours but watch it at 1.5x. The mental models he builds in that video will pay dividends in every AI conversation you have for the next decade. Come back next week and we'll go deeper on the engineering side — specifically how transformers actually learn, and what that means for building reliable AI products."},{"title":"The Tokenization Problem Nobody Tells You About","tagline":"The gnarly, underappreciated reason your LLM does weird things with numbers, spelling, and code — traced to its root cause.","format":"deep_dive","duration_min":40,"hook":"Karpathy opens his tokenization video with a set face. Quote: 'Tokenization is my least favorite part of working with large language models. But unfortunately, it is necessary to understand in some detail because it is fairly hairy, gnarly, and there are a lot of hidden foot guns to be aware of.' I want to dedicate today's episode to unpacking exactly what he means by that — and more importantly, what it means for you as someone building or using AI products.","outline":[{"name":"Why Characters Aren't Enough","desc":"The naive approach: character-level tokenization. 65 characters for Shakespeare. The problem: sequence length becomes precious and finite. The trade-off between vocabulary size and sequence length that drives the BPE algorithm. How GPT-4 landed on 100,277 tokens (cl100k_base tokenizer) as the Goldilocks point.","dur":"6 min"},{"name":"Byte Pair Encoding: The Algorithm","desc":"BPE step by step: start with raw bytes (256 symbols), find most frequent consecutive pairs, mint a new symbol for that pair, repeat. Why 'hello world' becomes 2 tokens but 'hello  world' (two spaces) becomes different tokens. Case sensitivity and its consequences. Live demonstration via tiktokenizer.vercel.app — the tool Karpathy uses on screen.","dur":"8 min"},{"name":"The Foot Guns: Where Tokenization Breaks Things","desc":"Systematic walkthrough of failure modes Karpathy identifies: spelling tasks fail because characters map to multi-character tokens; arithmetic is hard because numbers like '98234' may be one token or many; Python code quality changed significantly between GPT-2 (bad tokenization for Python) and GPT-4 (improved); non-English languages perform worse because they're over-tokenized per character of meaning; the 'trailing whitespace' bug explained; the 'SolidGoldMagikarp' token anomaly.","dur":"9 min"},{"name":"The YAML vs JSON Discovery","desc":"Why YAML tokenizes more efficiently than JSON for structured output. The practical prompt engineering implication: your choice of output format isn't just aesthetic — it affects token count and model cost. The broader principle: token efficiency should inform how you design prompts and output schemas.","dur":"5 min"},{"name":"Building the Tokenizer From Scratch","desc":"Walking through Karpathy's implementation in his GPT Tokenizer video: encode() and decode() functions, the vocab dictionary, handling invalid UTF-8 with errors='replace', the merges dictionary ordering in Python 3.7+. What this reveals about what OpenAI's actual tokenizer is doing under the hood.","dur":"7 min"},{"name":"Implications for Product and Prompt Engineering","desc":"How understanding tokenization changes prompt design: input your prompts into tiktokenizer before deploying, understand your actual context window consumption, be aware that code and non-English text consume more tokens per semantic unit. The business implication: tokenization literacy can meaningfully reduce inference costs at scale.","dur":"5 min"}],"key_questions":["Why does changing the case of a word or adding a space change the entire tokenization of a sentence?","What does the 'SolidGoldMagikarp' anomaly reveal about how models are trained and evaluated?","How much of LLM arithmetic failure is actually tokenization failure rather than reasoning failure?","What prompt engineering decisions become obvious once you understand BPE?","Is there a better alternative to BPE, and what are the leading research directions for next-generation tokenization?"],"sources":[{"title":"Let's build the GPT Tokenizer","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=zduSFxRajkE","insight":"Full BPE implementation from scratch, encode/decode functions, vocab dictionary, UTF-8 handling, YAML vs JSON efficiency finding, SolidGoldMagikarp anomaly"},{"title":"Deep Dive into LLMs like ChatGPT","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=7xTGNNLPyMI","insight":"Tokenization section: BPE overview, GPT-4 uses 100,277 tokens, 15 trillion token FineWeb dataset, tokens as atoms of LLMs"},{"title":"Let's build GPT: from scratch, in code, spelled out.","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=kCc8FmEb1nY","insight":"Naive character-level tokenization as baseline contrast, shows why scaling requires BPE"}],"guests":["A researcher working on tokenizer-free models (like Google's ByT5 or MegaByte) who can speak to whether BPE will survive into the next generation","A production ML engineer who has done token cost optimization at scale and has concrete numbers on YAML vs JSON savings","A linguist or NLP researcher working on multilingual models who can quantify the token disadvantage for non-English languages"],"cta":"Before your next LLM deployment, take 10 minutes and paste your core prompts into tiktokenizer.vercel.app. Count your tokens. Check whether your structured output format is adding unnecessary overhead. Small changes to tokenization-awareness can cut your inference costs meaningfully at scale. Link in the show notes."},{"title":"From Backprop to Billion-Dollar Products: The Foundation That Everyone Skips","tagline":"Understanding the chain rule of calculus is the difference between using AI and understanding AI — and it's not as hard as you think.","format":"solo","duration_min":45,"hook":"There's a particular kind of tech founder who uses AI very confidently but can't explain why their model hallucinates, why fine-tuning is expensive, or why their RAG implementation doesn't perform as expected. Almost always, the gap traces back to one thing: they've never spent two hours understanding backpropagation. Karpathy built an entire library called micrograd — 150 lines of Python — that implements everything you need to know. Today I'm going to make the case that understanding this one concept will change how you evaluate AI vendors, design AI products, and hire AI engineers.","outline":[{"name":"What Micrograd Is and Why Karpathy Built It","desc":"Micrograd as a pedagogical tool: a full autograd engine in 150 lines of Python with no dependencies. Karpathy's stated goal: show people what neural network training 'looks like under the hood.' The Value object that wraps numbers and tracks gradients. Why he considers this the foundation — not PyTorch, not transformers, but the chain rule.","dur":"7 min"},{"name":"The Loss Function: What Neural Nets Are Actually Optimizing","desc":"The loss function as the single number that measures wrongness. Gradient descent as the algorithm that minimizes it. The key insight: we don't need to understand every weight — we just need to know how each weight affects the loss. This is gradient computation. Business analogy: the loss function is your KPI, backprop is your attribution model.","dur":"7 min"},{"name":"The Chain Rule in Plain Language","desc":"Walking through Karpathy's micrograd example: forward pass computes g = 24.7, backward pass computes d(g)/d(a) = 138 and d(g)/d(b) = 645. The chain rule as the composition rule: how changes flow backward through the computation graph. Why this is what makes deep learning tractable — you don't need to derive gradients manually for every architecture.","dur":"8 min"},{"name":"Activations, Gradients, and BatchNorm — Where Models Actually Break","desc":"Karpathy's makemore Part 3 content: what vanishing and exploding gradients look like in practice, why tanh saturation causes dead neurons, how batch normalization was invented to solve the gradient flow problem. The intuition: BatchNorm is a technique that lets you train much deeper networks by keeping activation distributions well-behaved. Why this matters for understanding why some models train successfully and others don't.","dur":"8 min"},{"name":"From MLP to Transformer: The Scaling Leap","desc":"The progression in Karpathy's makemore series: bigram model → MLP (Bengio 2003) → WaveNet → GPT architecture. Each step introduces a new mechanism. The attention mechanism as the transformer's core innovation — not just averaging over past tokens but learning which past tokens are relevant. The matrix multiplication trick for efficient causal attention.","dur":"8 min"},{"name":"What This Means for Product Decisions","desc":"Five product decisions that change when you understand backprop: (1) Why fine-tuning requires careful learning rate scheduling — you're doing gradient descent on top of existing gradients. (2) Why catastrophic forgetting happens during fine-tuning. (3) Why larger batch sizes can hurt certain training runs. (4) Why prompt engineering and few-shot examples work the way they do. (5) Why 'alignment' is an optimization problem, not a policy problem.","dur":"7 min"}],"key_questions":["What is the minimum understanding of backpropagation that every AI product manager or founder needs?","How does understanding gradient flow explain why RLHF (reinforcement learning from human feedback) works the way it does?","What does the makemore series reveal about the research trajectory from simple MLPs to modern transformers?","Why do activation functions like ReLU and GeLU exist, and what problem are they solving?","If you understand backpropagation, what questions should you ask when evaluating AI vendors or hiring ML engineers?"],"sources":[{"title":"The spelled-out intro to neural networks and backpropagation: building micrograd","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=VMj-3S1tku0","insight":"Value object, forward pass computing g=24.7, backward pass chain rule, d(g)/d(a)=138, why += for gradient accumulation handles multi-use of nodes"},{"title":"Building makemore Part 3: Activations & Gradients, BatchNorm","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=P6sfmUTpUmc","insight":"Vanishing/exploding gradients visualized, tanh saturation, BatchNorm as solution, activation histograms as diagnostic tool"},{"title":"Building makemore Part 4: Becoming a Backprop Ninja","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=q8SA3rM6ckI","insight":"Manual backprop through cross-entropy, batchnorm, and embedding layers — building intuition for what PyTorch computes automatically"},{"title":"Let's build GPT: from scratch, in code, spelled out.","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=kCc8FmEb1nY","insight":"Causal attention mechanism, matrix multiply for weighted aggregation, the bag-of-words → attention leap, self-attention as communication mechanism"}],"guests":["A founder who built a production AI product and had to debug a training failure — someone with a real war story about gradient issues","A former researcher from a major AI lab (OpenAI, Anthropic, DeepMind) who can speak to where the field is now vs. when micrograd-era understanding was cutting edge","A technical investor who evaluates AI companies and can articulate what they're looking for in terms of ML depth in founding teams"],"cta":"Your homework: spend one weekend with Karpathy's micrograd video. It's three hours on YouTube and a GitHub repo with 150 lines of Python. You don't need to memorize the math — you need the mental model. After that, come back and I'll have a follow-up episode on what this means specifically for how you should evaluate and fine-tune foundation models for your products."},{"title":"AlphaGeometry and the Architecture of Machine Reasoning","tagline":"How DeepMind beat IMO silver medalists by combining a logical brain and a creative brain — and what this blueprint means for the next generation of AI agents.","format":"deep_dive","duration_min":30,"hook":"In January 2024, Google DeepMind released a system called AlphaGeometry. It solved 25 out of 30 International Mathematical Olympiad geometry problems — better than a silver medalist. The headline writes itself. But here's the thing that got buried in the coverage: before any AI was involved, a 25-year-old brute-force symbolic system called DD+AR was already solving 18 out of 30. That's nearly a bronze medal. No neural networks. No language models. Just geometry rules and linear algebra. The real story of AlphaGeometry isn't that AI is good at math. It's the architecture of how they combined symbolic and neural reasoning — and that architecture is a blueprint for every AI agent you'll build in the next five years.","outline":[{"name":"The Deductive Database: What Symbolic AI Gets Right","desc":"DD+AR explained: 75 geometry rules (deductive database) + algebraic reasoning (linear equation solving). The surprising result: pure symbolic methods, no AI, solved 7/30 problems. Adding algebraic reasoning got to 14/30. Human-coded heuristics pushed it to 18/30. The lesson: for well-defined domains with known rules, symbolic systems are extraordinarily effective and interpretable. Business implication: don't reach for neural networks when rule engines suffice.","dur":"7 min"},{"name":"The Wall: What Symbolic AI Can't Do","desc":"The auxiliary construction problem: to solve hard geometry problems, you need to draw in extra lines or shapes not in the original diagram. This is creative — it requires knowing what to add before you know why it helps. DD+AR cannot do this. The infinite search space problem: at every step, you could add any point or line, and the space of possibilities is unbounded. This is where the language model becomes necessary.","dur":"6 min"},{"name":"The Creative/Logical Architecture","desc":"AlphaGeometry's core loop: (1) language model proposes an auxiliary construction, (2) DD+AR applies logical deduction until it terminates, (3) repeat. The language model is the creative brain; DD+AR is the logical brain. The training data problem: solved by synthetic data generation — randomly plot points, run DD+AR forward to derive theorems, erase portions to create problems with known solutions. Generated 9 million proofs requiring at least one auxiliary construction. The synthetic data flywheel.","dur":"7 min"},{"name":"The 2024 Update: Gold Medals with Natural Language","desc":"3Blue1Brown's footnote (from the video): by 2024, multiple groups — including Google DeepMind and OpenAI — achieved gold-level performance on all IMO problems using natural language, no domain-specific geometry language required. What this progression means: the architecture has generalized. The logical brain is now a general-purpose reasoner, not a geometry-specific engine.","dur":"5 min"},{"name":"The Agent Architecture Blueprint","desc":"Abstraction: AlphaGeometry = (creative LLM that generates hypotheses) + (reliable verifier that validates them). This pattern appears in: OpenAI's o1/o3 'thinking' models (internal reasoning as hypothesis generation), code agents (LLM writes code, interpreter verifies), and scientific discovery systems. The key design principle: separate the generation step from the verification step. Never trust the LLM to verify its own outputs.","dur":"5 min"}],"key_questions":["Why did DeepMind use a hybrid symbolic+neural approach rather than pure neural, and when does that architectural choice pay off?","What does synthetic data generation — training on problems you create yourself — reveal about the data scarcity problem in specialized domains?","How does the creative/logical brain architecture map onto the agent frameworks being built today (ReAct, function calling, tool use)?","What is the verification gap in current AI agents, and why does AlphaGeometry's use of DD+AR as a verifier matter so much?","What domains are next for this approach beyond mathematics — and what would the equivalent of DD+AR look like in biology, law, or software?"],"sources":[{"title":"The AI that solved IMO Geometry Problems | Guest video by @Aleph 0","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=4NlrfOl0l8U","insight":"Full AlphaGeometry architecture, DD+AR baseline (18/30 without AI), synthetic proof generation at scale (9M examples), creative+logical brain framing, 2024 update to gold medal performance"}],"guests":["A researcher working on formal verification or theorem proving in production systems (e.g., proof assistants for software correctness)","An AI safety researcher who can connect the AlphaGeometry verifier pattern to the broader question of scalable oversight","A founder building AI agents for specialized professional domains (legal, medical, engineering) where verification is the bottleneck"],"cta":"If you're building AI agents, the architecture principle from today is this: separate your generator from your verifier. Your LLM should never be the only thing checking its own work. Whether that verifier is a symbolic engine, a unit test runner, or a human in the loop — design for verification from day one. Next episode we'll go deep on voice interfaces and how the interaction paradigm is shifting from chat to ambient audio."},{"title":"Voice Interfaces Are Not Chat. Here's Why That Changes Everything.","tagline":"The engineering and product lessons from a decade of shipping voice AI — and why the next wave of enterprise AI isn't text-based.","format":"interview","duration_min":40,"hook":"Every founder I talk to is building a chatbot. It makes sense — chat is the interface we know. But Ashwyn Sharma, CEO of VocalBridge and a decade-deep veteran of voice AI at Meta, Salesforce, and AutoAI, has a different thesis: voice is not just a different modality, it's a fundamentally different design surface that requires completely different architecture, completely different evaluation, and completely different product intuitions. Today we're going to go deep on what he calls 'the alphabet soup problem' — the six layers of infrastructure that nobody talks about until they're already months into a voice project.","outline":[{"name":"The Alphabet Soup Problem","desc":"What seems like a simple three-component stack (STT + LLM + TTS) explodes into voice activity detection, prosody, endpointing, barging handling, turn detection, and more. Why teams consistently underestimate voice project timelines by 3-6 months. The key distinction between a voice prototype and a production voice system.","dur":"7 min"},{"name":"Enterprise vs. Consumer Voice AI","desc":"The different requirements: enterprise voice needs integration with CRMs, compliance recording, caller authentication, transfer protocols, and SLA guarantees. Consumer voice is optimized for latency and naturalness. Why the same tech stack serves both poorly. Real latency targets: human conversation expects <200ms, enterprise telephony tolerates 300-400ms, what current LLM voice pipelines actually deliver.","dur":"8 min"},{"name":"The Managed Platform Thesis","desc":"VocalBridge's three surfaces: (1) add voice to existing applications, (2) add voice to existing AI agents, (3) build voice apps from scratch. The argument for a fully managed voice AI platform vs. assembling components. What 'fully managed' actually means at scale — the SLAs, the failover, the voice profile storage.","dur":"7 min"},{"name":"Turn Detection and the Natural Conversation Problem","desc":"Why turn detection is harder than it sounds: humans interrupt, trail off, use filler words, and pause mid-sentence. The difference between endpointing (detecting when someone stops speaking) and turn detection (detecting when they intend to hand control back to the AI). Why this is the single biggest quality lever for voice AI naturalness.","dur":"7 min"},{"name":"Where Voice AI Goes From Here","desc":"The ambient intelligence thesis: voice as the default interface for AI in physical spaces — retail, healthcare, manufacturing, logistics. Why the enterprise use cases (call centers, customer service, internal tools) are 3-5 years ahead of consumer ambient. What the integration challenges look like for connecting voice agents to existing enterprise data.","dur":"7 min"}],"key_questions":["What are the specific technical components of a production voice AI stack that most teams don't know they need until they're already in trouble?","How do you evaluate a voice AI system beyond accuracy? What are the metrics that actually predict user satisfaction?","What does enterprise voice AI require that consumer voice AI doesn't — and which of those requirements drive the most build time?","Where does turn detection fail, and what are the current best approaches to solving it?","What's the business model for a voice AI platform — how do you price something where the unit economics are tied to call minutes?"],"sources":[{"title":"AI Dev 26 x SF | Ashwyn Sharma: Every App Needs a Voice UI. Here's How to Build It","channel":"DeepLearning.AI","url":"https://www.youtube.com/watch?v=7VISmcJpqis","insight":"Alphabet soup problem (VAD, prosody, endpointing, barge-in, turn detection), VocalBridge three surfaces, managed platform vs. assembled stack, 6-month timeline underestimation pattern"}],"guests":["Ashwyn Sharma directly — CEO of VocalBridge, 10 years of voice AI at Meta/Salesforce/AutoAI","An enterprise CX leader from a company that has deployed voice AI at scale (contact center, IVR replacement) with production data on outcomes","A researcher working on end-to-end speech models (like Whisper or Google's USM) who can speak to where the architecture is heading"],"cta":"If you're considering a voice AI project, three things before you start: (1) budget at minimum double the time you think it will take for the production hardening, (2) decide early whether you're building your own stack or using a managed platform, (3) benchmark turn detection quality before any other feature — it's the most impactful and most underestimated variable. Links to VocalBridge and the DeepLearning.AI talk in the show notes."},{"title":"The Enterprise AI Gap: Why Vibe Coding Breaks at Month Three","tagline":"The CMU study that should change how every engineering team thinks about AI-generated code — before they find out the hard way.","format":"debate","duration_min":45,"hook":"Carnegie Mellon published a study on Cursor usage at enterprise software teams. Month one: velocity spikes 3-5x, developers are euphoric. Month two: code complexity is rising, static analysis warnings are increasing, but nobody's worried. Month three: velocity is back to baseline. Teams are spending their time debugging code they don't fully understand, written by a tool that wasn't designed to care about six-month maintainability. Tom Howlett of Sonar calls this the enterprise quality gap, and today we're going to debate whether it's a temporary problem that tooling will solve, or a structural problem that requires a different approach to AI-assisted development entirely.","outline":[{"name":"The CMU Study: What the Data Actually Shows","desc":"Velocity +300-500%, static analysis warnings up, code complexity up, 90-day velocity collapse. Why these three metrics are the leading indicators. The difference between code correctness (does it pass tests today) and code quality (can humans and AIs extend it in six months). The <50K lines threshold: why LLM-generated code works well for small, short-lived applications.","dur":"8 min"},{"name":"The Bull Case: Tooling Will Solve This","desc":"The argument that the SDLC will adapt: better code review tools, AI-native linters, automated refactoring agents. CodeRabbit and Sonar as examples. The historical parallel to the 1990s web: SDLC took years to catch up to the web, but it did. The optimist's position: we're in the 1995 moment for AI code, and the 2000s moment — stable, production-ready — is coming.","dur":"8 min"},{"name":"The Bear Case: Structural Problem in the Architecture","desc":"Howlett's concern: every model version has a completely different quality profile — complexity, security vulnerabilities, maintainability. There's no consistent benchmark. Agents generate large change sets that make code review less effective. The adversarial risk for mission-critical production code (banking, healthcare, infrastructure). The argument that you can't patch your way out of a training objective problem: these models weren't optimized for long-term maintainability.","dur":"8 min"},{"name":"The Security Vector","desc":"Sonar's benchmark findings: security vulnerability rates vary dramatically by model and by thinking mode. The specifics of what enterprise-grade security means: adversarial users, public-facing APIs, regulatory compliance. The LLM code security problem: models can generate code that passes functional tests but has subtle injection, authentication, or dependency vulnerabilities.","dur":"7 min"},{"name":"What Should Engineering Teams Actually Do Now","desc":"Practical recommendations: separate AI-generated code into 'throwaway' and 'production' categories from the start, apply different review standards to each. Use AI for internal tooling at full velocity; apply traditional SDLC gates to production code. The argument for AI-native code review tooling as the highest-leverage investment right now.","dur":"7 min"},{"name":"The Synthesis: A Framework for Responsible AI Coding","desc":"The two-track model: Track A (internal tools, scripts, prototypes <50K lines) — full AI velocity, minimal gates. Track B (production systems, customer-facing, regulated) — AI assistance with mandatory complexity, security, and maintainability gates before merge. The point: the solution isn't to slow down, it's to be deliberate about which track you're on.","dur":"7 min"}],"key_questions":["Is the enterprise quality gap a temporary tooling problem or a structural characteristic of how current models are trained?","What should a CTO's AI coding policy look like in 2025 — what are the non-negotiable guardrails?","Why do static analysis warnings matter so much more for AI-generated code than for human-written code?","How do you design a code review process that scales when AI is generating 10x the volume of commits?","What does the Sonar benchmark reveal about the relationship between model 'thinking mode' and code quality?"],"sources":[{"title":"AI Dev 26 x SF | Tom Howlett: Can LLMs Generate Enterprise Quality Code?","channel":"DeepLearning.AI","url":"https://www.youtube.com/watch?v=Z_pCTBtCmck","insight":"CMU Cursor study, enterprise quality gap definition, Sonar benchmark methodology, every model has different quality profile, SDLC hasn't adapted, security vulnerability rates vary by thinking mode"},{"title":"Deep Dive into LLMs like ChatGPT","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=7xTGNNLPyMI","insight":"RLHF optimization for human preference signals — models are optimized to produce outputs humans rate highly, not outputs that are maintainable in 6 months"}],"guests":["Tom Howlett (VP Engineering, Sonar) directly — the presenter from the DeepLearning.AI talk, has the benchmark data","A CTO who has navigated this transition at scale and has actual data on their 90-day velocity curve","A security researcher specializing in LLM-generated code vulnerabilities — this is an underreported threat vector"],"cta":"Before your next sprint, have a ten-minute conversation with your engineering team about which code is on Track A and which is on Track B. The ROI on that conversation is enormous. If you want the Sonar benchmark data, link is in the show notes. Next week we're going deep on agent identity — the surprisingly thorny question of what happens when your AI agent needs to authenticate as a human."},{"title":"The Identity Crisis of Browser Agents","tagline":"When your AI agent needs to log in, fill out a CAPTCHA, and pass two-factor authentication — the unsolved problem at the center of agentic AI.","format":"deep_dive","duration_min":35,"hook":"Imagine you've built a browser agent to automate a workflow. It navigates to a site, starts filling in a form — and then hits login. What credentials does it use? Whose session does it inherit? If it creates a new account, is it a real person? If it uses yours, what are the legal and security implications? This is what Idan Raman from Anchor calls the identity crisis for browser agents, and it's one of the most underappreciated engineering challenges in AI right now. It's also, I'd argue, the bottleneck that determines how far agents can actually automate real-world workflows.","outline":[{"name":"What Browser Agents Need to Work","desc":"The full stack of a browser automation agent: navigation, form filling, authentication, session management, rate limit handling, IP reputation. Most discussions focus on the first two. The identity layer — authentication and session management — is where agents currently break down in production.","dur":"6 min"},{"name":"The Three Identity Problems","desc":"Problem 1: Credentials exposure — agents that hold credentials can exfiltrate or misuse them. Problem 2: Session sharing — if 1000 agent instances share one session, that's a terms of service violation and a security risk. Problem 3: Bot detection — Cloudflare, CAPTCHA, behavioral analysis, and fingerprinting are designed to detect exactly what agents do.","dur":"7 min"},{"name":"Anchor's Approach: Human Identity as a Managed Resource","desc":"The concept of managed digital identities for AI agents — giving agents access to human-like identities without exposing actual credentials. The key architectural distinction: the agent doesn't know the password, it knows it has authorized access to a session. How this works technically: session tokens, OAuth delegation, and identity proxies.","dur":"7 min"},{"name":"Legal and Regulatory Surface","desc":"The terms-of-service question: most websites prohibit automated access. When does agent access become unauthorized computer access? GDPR and data residency implications of browser agents operating across jurisdictions. The enterprise vs. consumer divide: enterprise web services are increasingly offering API access for agents, consumer web services are not.","dur":"7 min"},{"name":"What This Means for the Agent Future","desc":"The thesis: the limiting factor on agentic AI in 2025 is not reasoning capability, it's the identity and access layer. Agents that can operate within enterprise-controlled identity systems will unlock massive automation. Agents operating in the open web will continue to face escalating friction. The business opportunity in managed agent identity infrastructure.","dur":"8 min"}],"key_questions":["What is the minimal identity infrastructure required for a browser agent to operate reliably in production?","How do you handle the case where a site requires a real human to complete a CAPTCHA or biometric challenge?","What are the legal implications of an AI agent operating with a human's session credentials?","Is bot detection an arms race that agents will eventually win, or is there a stable equilibrium where detection remains effective?","What would enterprise-grade agent identity management look like as a product category?"],"sources":[{"title":"AI Dev 26 x SF | Idan Raman: The Identity Crisis of Browser Agents","channel":"DeepLearning.AI","url":"https://www.youtube.com/watch?v=klAynlP04h0","insight":"Identity crisis framing, Anchor's managed identity approach, security and reliability requirements for human identities used by AI agents, browser agent authentication architecture"}],"guests":["Idan Raman (co-founder, Anchor) directly — the presenter, building this infrastructure","A security researcher specializing in browser fingerprinting and bot detection who can explain the arms race from the detection side","A legal expert in computer fraud and unauthorized access who can map out the regulatory landscape for browser automation"],"cta":"If you're building a browser agent for anything beyond a private, authenticated enterprise system, the identity question should be your first architecture decision, not an afterthought. What does your agent use to authenticate? Who owns that session? What happens when the site updates its bot detection? Start with those three questions. I'll link Anchor's work in the show notes."},{"title":"Reproducing GPT-2 for $10: The Democratization of Foundation Models","tagline":"What Karpathy's GPT-2 reproduction project reveals about the real cost of intelligence — and what changes when that cost approaches zero.","format":"solo","duration_min":38,"hook":"In 2019, OpenAI trained GPT-2. It was a significant research achievement and it cost serious compute. In Karpathy's 2024 'Let's Reproduce GPT-2' video — the longest in his series at 4.5 hours — he shows you how to reproduce the 124 million parameter version in under an hour for about ten dollars on cloud compute. Not an approximation. Not a toy. The actual model, matching the original performance. This is one of the most important demonstrations in AI education of the last several years, and today I want to talk about what it actually reveals about the trajectory of AI infrastructure costs, what it means for startups, and why the 'we can't compete with OpenAI's compute' argument is increasingly a cope.","outline":[{"name":"The $10 Reproduction: What Karpathy Actually Did","desc":"GPT-2 124M architecture: 12 layers, 768 dimensions, 12 attention heads. The training setup in PyTorch. The optimization techniques applied: flash attention, torch.compile (2.3x speedup from one line), mixed precision (bf16), gradient accumulation. The final result: matching OpenAI's 2019 validation loss in ~1 hour of A100 time. Why this matters: a 2019 state-of-the-art model is now a weekend hobby project.","dur":"8 min"},{"name":"The Compute Efficiency Stack","desc":"Detailed walkthrough of the optimization layers Karpathy uses: torch.compile (eliminates Python interpreter overhead, kernel fusion reduces GPU memory roundtrips), FlashAttention (rewrites attention to minimize HBM reads/writes), bf16 over fp32 (2x throughput on modern hardware), gradient accumulation (simulates large batch sizes without proportional memory cost). The cumulative effect: 10-15x speedup vs. naive PyTorch on the same hardware.","dur":"8 min"},{"name":"The Scaling Laws Implication","desc":"If 2019's state-of-the-art is $10 in 2024, what does that mean for the cost curve? The Chinchilla scaling laws: optimal training is compute-proportional to model size AND data size. The practical implication for startups: you don't need frontier-scale compute to train highly capable task-specific models. The 'distillation and fine-tuning' thesis — how smaller models trained on outputs from larger models can approach frontier performance at a fraction of the cost.","dur":"7 min"},{"name":"GPU Architecture: Why the Cost Keeps Falling","desc":"Karpathy's explanation of GPU memory architecture from the reproduction video: HBM (high bandwidth memory, off-chip, expensive to access) vs. SRAM (on-chip cache, fast). The fundamental constraint: memory bandwidth, not FLOPS, is often the bottleneck. Why every hardware generation increases memory bandwidth faster than compute. What H100 → H200 → GB200 means for training cost. The democratization curve: frontier training of 2022 models is now AWS spot instance territory.","dur":"7 min"},{"name":"What This Means for Startup Strategy","desc":"Three strategic implications: (1) The moat in AI is data and RLHF, not compute — if $10 buys you GPT-2, the training infrastructure is not a barrier. (2) Task-specific models trained on proprietary data will outperform general models for narrow use cases — and that's where startups win. (3) The 'we'll wait for APIs' strategy has a time limit: as training costs fall, more competitors can fine-tune on your use case. The imperative to lock in proprietary training data now.","dur":"8 min"}],"key_questions":["What does the 10-dollar GPT-2 reproduction mean for the competitive landscape — who does it help and who does it hurt?","Which of the optimization techniques in Karpathy's reproduction (torch.compile, FlashAttention, bf16) are most impactful and why?","How does the Chinchilla scaling law relate to the practical decisions startups should make about model size vs. training data size?","What is the minimum compute investment required to train a task-specific model that beats GPT-4 on a narrow domain?","As training costs fall toward zero, where does AI company value actually accrue?"],"sources":[{"title":"Let's reproduce GPT-2 (124M)","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=l8pRSuU81PU","insight":"Full GPT-2 124M reproduction for ~$10, torch.compile 2.3x speedup, FlashAttention integration, bf16 training, gradient accumulation, HBM vs SRAM memory architecture, Chinchilla-optimal training setup"},{"title":"[1hr Talk] Intro to Large Language Models","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=zjkBMFhNj_g","insight":"Llama 2 70B = $2M to train in 2023, scale of state-of-the-art training, cost trajectory"}],"guests":["A founder who has successfully trained a domain-specific model that beats GPT-4 on their use case, with actual benchmark data","A GPU cloud provider or infrastructure engineer who can speak to the actual cost curves for compute over the last 5 years","An ML researcher working on training efficiency (quantization, distillation, pruning) who can extend Karpathy's efficiency stack"],"cta":"If you're building an AI product and you haven't seriously considered training a domain-specific model, this is your homework: read the Chinchilla paper, run Karpathy's GPT-2 reproduction on a rented A100 instance, and come back with a cost estimate for training a model on your proprietary data. The number will likely be smaller than you expect. Links in the show notes."}];
+
+const YOUTUBE_PLANS = [{"title":"I Read Every Andrej Karpathy AI Video So You Don't Have To","thumbnail":{"emoji":"🎬","concept":"Split screen: left side is a mountain of text/code; right side is Barron looking calm with a simple whiteboard diagram. Text overlay: 'The Karpathy Syllabus' in bold."},"format":"roundup","duration_min":18,"hook":"Andrej Karpathy has published roughly 200 hours of AI education on YouTube. I've watched all of it. Today I'm going to give you the 20-minute version — the six mental models that will actually change how you think about AI products. No code required. Starting now.","structure":[{"name":"Why This Matters","content":"Who Karpathy is — Tesla AI director, OpenAI co-founder, now independent educator. Why his content is uniquely valuable for builders vs. researchers. The goal of this video: extract the business-relevant mental models, not the math.","dur":"1:30"},{"name":"Mental Model 1: The Lossy Zip File","content":"LLMs are lossy compression of the internet. 10TB of text → 140GB of weights. This is why they hallucinate (incomplete compression), why they have knowledge cutoffs (compression snapshot), and why retrieval augmentation works (give it the actual document). Animated diagram: internet → compression → parameters → inference.","dur":"2:30"},{"name":"Mental Model 2: The Context Window Is Working Memory","content":"Anything not in the context window doesn't exist for the model. New chat = reset to zero. This is not a limitation to work around — it's the design. The implication: every production AI app is really a context window engineering problem.","dur":"2:00"},{"name":"Mental Model 3: The Three-Stage Training Pipeline","content":"Pre-training (internet compression), Supervised Fine-Tuning (conversation examples), RLHF (preference optimization). Why the model you pay for in ChatGPT is not the base model — it's a specific persona on top of a base model trained for next-token prediction. The business implication: different failure modes at each stage.","dur":"2:30"},{"name":"Mental Model 4: Tokens as Atoms","content":"Everything is tokens. GPT-4 uses 100,277 possible tokens. This is why math is hard (numbers tokenize inconsistently), why Python improved between GPT-2 and GPT-4 (tokenization got better), and why YAML is cheaper than JSON (token efficiency). Quick demo: tiktokenizer.vercel.app","dur":"2:00"},{"name":"Mental Model 5: Tools Multiply Model Capability","content":"The model alone is a starting point. Web search, code interpreter, deep research, file upload — each tool transforms the quality of outputs. Karpathy's actual daily workflow: Perplexity for search queries, Deep Research for synthesis, Claude for document analysis. The practical framework: match query type to tool.","dur":"2:00"},{"name":"Mental Model 6: RLHF Is Preference Optimization, Not Truth Optimization","content":"Models are trained to produce outputs humans rate highly in the short term, not outputs that are correct, safe, or maintainable long-term. This is why they're overconfident, why they sound authoritative when wrong, and why 'sounds good' ≠ 'is right.' The sycophancy problem explained.","dur":"2:00"},{"name":"Call to Action","content":"Where to go next: link to Karpathy's full playlist. The one video to watch first: Deep Dive into LLMs (3 hours, watch at 1.5x). Subscribe for the next video: Building GPT from scratch in 15 minutes.","dur":"1:00"}],"key_points":["The 'lossy zip file' metaphor is the most important single frame for understanding why LLMs behave the way they do","Context window engineering is the underrated skill in AI product development — not prompting, not RAG, but architecting what lives in the context","The three-stage training pipeline explains most LLM failure modes at the product layer","RLHF optimizes for human preference ratings, not ground truth — understanding this gap changes how you verify AI outputs","Tools don't just improve outputs — they fundamentally change what class of problems the model can solve"],"sources":[{"title":"Deep Dive into LLMs like ChatGPT","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=7xTGNNLPyMI"},{"title":"How I use LLMs","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=EWvNQjAaOHw"},{"title":"[1hr Talk] Intro to Large Language Models","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=zjkBMFhNj_g"}],"broll":["Screen recording of tiktokenizer.vercel.app showing hello world tokenization live","Animated diagram of 10TB internet → 140GB compression arrow","Side-by-side of ChatGPT New Chat button + animated context window resetting to zero","Screen recording of Perplexity vs Deep Research side by side on same query","Simple whiteboard diagram of three training stages with different color arrows"],"cta":"Subscribe and hit the bell — I post one deep AI breakdown per week. Next video: I build GPT from scratch in 15 minutes. No PhD required."},{"title":"Why ChatGPT Can't Count the Letter R in Strawberry (It's Not a Bug)","thumbnail":{"emoji":"🎬","concept":"The word STRAWBERRY with each letter highlighted in different colors. Text overlay: 'Why AI Fails at This' with a giant red X. Barron's face showing mock confusion."},"format":"explainer","duration_min":12,"hook":"How many Rs are in the word strawberry? Go ahead, count them. Three, right? ChatGPT famously answers two. And the reason isn't that the model is dumb. It's that to the model, the word 'strawberry' might be a single token — one indivisible symbol — and you can't count letters inside a symbol. Today I'm going to explain exactly why this happens, using Andrej Karpathy's GPT tokenizer video, and I'm going to show you five other weird LLM behaviors that all trace back to the same root cause.","structure":[{"name":"The Strawberry Demo","content":"Live screen recording: ask ChatGPT to count Rs in strawberry. Show the wrong answer. Then go to tiktokenizer.vercel.app and show how 'strawberry' tokenizes. The aha moment: it's one or two tokens, not individual letters.","dur":"1:30"},{"name":"What BPE Actually Does","content":"Byte Pair Encoding explained in 90 seconds: start with 256 byte symbols, find most common pairs, merge them, repeat until vocabulary reaches ~100K symbols. Show a simple animation: 'the' appears 1 million times → becomes a single token. The trade-off: shorter sequences but you lose character-level resolution.","dur":"1:30"},{"name":"Failure Mode 1: Spelling and Letter Counting","content":"Why tasks like 'reverse this word' or 'count the vowels' are hard: the model is operating on tokens, not characters. Show via tiktokenizer: 'Hello' vs 'hello' vs 'HELLO' — all different tokens. The model has to 'un-encode' the token in its head to reason about characters.","dur":"1:30"},{"name":"Failure Mode 2: Arithmetic Inconsistency","content":"Why 98,234 + 1 might tokenize as one token but 98,235 tokenizes as three tokens. Show specific numbers in tiktokenizer. The model's arithmetic is inconsistent because the 'atoms' it sees are different sizes for different numbers.","dur":"1:15"},{"name":"Failure Mode 3: Non-English Languages","content":"English text compresses to roughly 1 token per 0.75 words. Chinese or Arabic often need 2-3x more tokens per equivalent meaning. Why: BPE was trained on English-dominated internet data. The business implication: non-English apps cost more to run and have lower quality ceilings.","dur":"1:15"},{"name":"Failure Mode 4: Python vs. Other Languages","content":"Karpathy's observation: GPT-2 was noticeably worse at Python than GPT-4. Why: the tokenizer improved between versions. Show how Python indentation tokenizes — each space may be a separate token. The fix in newer models: better handling of whitespace in code.","dur":"1:00"},{"name":"Failure Mode 5: The YAML vs JSON Efficiency Gap","content":"Show a simple JSON object and the same data in YAML via tiktokenizer. YAML typically uses 10-30% fewer tokens. For high-volume API usage this translates directly to cost. The practical recommendation: if you're generating structured output at scale, benchmark your schema choice.","dur":"1:15"},{"name":"The Fix and the Lesson","content":"You can work around tokenization limits: (1) ask the model to spell out words letter by letter before counting, (2) use the code interpreter to count programmatically, (3) understand that some tasks require chain-of-thought to compensate for tokenization blindness. The deeper lesson: LLM weirdness usually has a root cause, and understanding it lets you engineer around it.","dur":"1:00"}],"key_points":["Tokenization is BPE: the model sees word-chunks, not letters — this single fact explains most LLM 'stupidity'","GPT-4 uses 100,277 tokens and 'strawberry' may be 1-2 of them — you can't count letters inside a token","Non-English languages are over-tokenized relative to English, which is both a quality and cost problem","YAML vs JSON token efficiency is a real and measurable cost lever at scale","When LLMs fail at simple tasks, ask: is this a tokenization issue? Can I prompt around it?"],"sources":[{"title":"Let's build the GPT Tokenizer","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=zduSFxRajkE"},{"title":"Deep Dive into LLMs like ChatGPT","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=7xTGNNLPyMI"}],"broll":["Screen recording of tiktokenizer.vercel.app — live tokenization demo for multiple words","Screen recording of ChatGPT answering the strawberry question incorrectly","Animated comparison: English vs. Chinese text tokenization efficiency with token count displayed","Side-by-side JSON vs YAML token count visualization","Simple BPE animation showing byte pairs being merged iteratively"],"cta":"If this changed how you think about AI limitations, subscribe — I post weekly breakdowns like this. Comment below: what other LLM behaviors do you want me to root-cause?"},{"title":"How I Actually Use AI Tools Every Day (Andrej Karpathy's Workflow, Explained)","thumbnail":{"emoji":"🎬","concept":"Split panel: Karpathy's face on one side (borrowed from his YouTube thumbnail style), Barron's on the other. Text overlay: 'The Real AI Workflow.' Clean, professional."},"format":"reaction","duration_min":22,"hook":"Andrej Karpathy just published a 90-minute video called 'How I Use LLMs.' I've watched it three times, taken 8 pages of notes, and I want to walk you through the most useful parts — because his personal workflow is one of the best AI literacy documents I've seen in 2025. Let's dig in.","structure":[{"name":"The Ecosystem Map","content":"Karpathy's taxonomy of LLM apps in 2025: ChatGPT (incumbent, most feature-rich), Claude (best for document analysis), Gemini/Copilot/Meta AI (big tech), Grok (xAI), DeepSeek (Chinese), Mistral (French). The leaderboards he actually uses: Chatbot Arena (ELO rankings), Scale's SEAL leaderboard. Why keeping up with the landscape matters for product decisions.","dur":"2:00"},{"name":"The Query Type Framework","content":"Karpathy's mental model: match query to tool. Type 1: Search-answerable (Perplexity). Type 2: Synthesis/research (Deep Research). Type 3: Document analysis (Claude with file upload). Type 4: Code generation (ChatGPT/Claude). Type 5: Brainstorming/writing (any capable model). Walk through his actual examples from the video: 'Is the market open today?' → Perplexity. 'CaAKG supplement research' → Deep Research.","dur":"3:00"},{"name":"Deep Research: The Underrated Feature","content":"Deep Research = search + thinking + synthesis, running for 10 minutes and reading 27 sources. Karpathy's candid assessment: ChatGPT Deep Research is currently best, Perplexity and Grok are shorter and less thorough. His failure case: the LLM labs table that was missing xAI and had wrong funding numbers. The takeaway: treat it as a first draft for source discovery, not ground truth.","dur":"2:30"},{"name":"Reading Documents and Books With AI","content":"Karpathy's pattern: drag-drop a PDF into Claude, ask for summary, then read alongside asking questions. His real example: Evo2 (genome modeling paper). His book reading practice: copy-paste chapters from Project Gutenberg into Claude's context window. Specific example: The Wealth of Nations, chapter on division of labor. Quote: 'I never read books alone anymore.' The tool he wishes existed: inline highlighting + AI Q&A.","dur":"2:30"},{"name":"Vibe Coding and the New Development Workflow","content":"Karpathy's quote on software engineering changing fundamentally. His workflow for new projects: describe what you want, let the LLM scaffold, iterate through conversation. The practical limits he acknowledges: works well for new code, struggles with debugging legacy systems. Connection to the enterprise quality gap (Tom Howlett's work): the vibe coding productivity boost and its eventual wall.","dur":"2:00"},{"name":"The Practical Takeaways","content":"Five habits from Karpathy's workflow that anyone can implement this week: (1) Stop treating ChatGPT as the only tool — build a multi-tool workflow, (2) Use Deep Research for anything requiring synthesis across multiple sources, (3) Read technical papers and books with an LLM in hand, (4) Categorize your queries before choosing your tool, (5) Check the chatbot leaderboards quarterly.","dur":"2:00"}],"key_points":["Karpathy uses five different AI tools daily — treating them as a portfolio, not a single solution","Deep Research is genuinely a new category of capability, not just a better search — 10+ minutes, 27 sources, synthesized report","The document analysis use case (PDFs, books, papers) is massively underutilized — it transforms how you read technical content","His failure example with the LLM labs table is a perfect illustration of why Deep Research outputs need verification","The query type framework (search vs. synthesis vs. document analysis vs. code) is the most actionable piece of AI product literacy"],"sources":[{"title":"How I use LLMs","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=EWvNQjAaOHw"}],"broll":["Screen recording: navigating to chatbot arena and showing the ELO rankings","Screen recording: Perplexity search query vs Deep Research query for same topic — side by side results","Screen recording: dragging a PDF into Claude and asking questions about it","Screen recording: Project Gutenberg → copy-paste chapter → Claude context window","Montage of different AI tool interfaces side by side: ChatGPT, Claude, Perplexity, Grok"],"cta":"Drop in the comments: which AI tool is your current favorite and what do you use it for? I read every reply. Subscribe for weekly breakdowns of the best AI content."},{"title":"DeepMind's AI Beat IMO Silver Medalists. Here's the Architecture That Did It.","thumbnail":{"emoji":"🎬","concept":"Geometric diagram on a chalkboard with 'AI: 25/30' stamped on it in green. Text overlay: 'The Creative + Logical Brain.' Clean academic aesthetic."},"format":"explainer","duration_min":16,"hook":"In January 2024, an AI system called AlphaGeometry solved 25 out of 30 International Math Olympiad geometry problems. That's better than a silver medalist. The headlines were everywhere. But the real story — the architecture story that should change how you design AI systems — got almost no coverage. Today, in 16 minutes, I'm going to explain the blueprint that made this possible, because it's the same blueprint you should be thinking about when you build AI agents.","structure":[{"name":"The Baseline Nobody Talks About","content":"Before any AI was involved, a 25-year-old symbolic system called DD+AR already solved 18/30 — nearly a bronze medal. DD: 75 geometry rules applied exhaustively. AR: linear equation solving. No neural networks. The lesson before we even get to the AI part: for well-defined domains with known rules, symbolic systems are extraordinarily powerful.","dur":"2:00"},{"name":"Where Symbolic AI Breaks Down","content":"The auxiliary construction problem: to solve hard geometry problems, you must draw extra lines not in the diagram. This is creative — you need to know what to add before you know why it helps. Infinite search space at every step. Animated illustration: a triangle, then drawing a line that unlocks the proof. DD+AR cannot do this step.","dur":"1:30"},{"name":"The AlphaGeometry Loop","content":"The core architecture animated: (1) LM proposes an auxiliary construction, (2) DD+AR runs logic until it terminates, (3) repeat. The creative brain (LM) generates hypotheses. The logical brain (DD+AR) verifies them deterministically. No hallucination possible in the verification step. This is the key: generation is probabilistic, verification is symbolic.","dur":"2:00"},{"name":"The Synthetic Data Flywheel","content":"The training data problem: not enough IMO problems with solutions. Solution: generate hundreds of millions of synthetic proofs. Method: randomly plot points, run DD+AR to derive theorems forward, erase portions to create problems with known solutions. Generated 9 million proofs requiring auxiliary constructions. The lesson: if you don't have training data, generate it from your verifier.","dur":"1:40"},{"name":"The 2024 Update: Natural Language Gold","content":"By late 2024, DeepMind and OpenAI both achieved gold-level performance using natural language — no domain-specific geometry language required. The progression: DD (7/30) → DD+AR (14/30) → DD+AR+heuristics (18/30) → AlphaGeometry (25/30) → Gold (all problems). Each step is a different architectural choice.","dur":"1:30"},{"name":"The Blueprint for Your AI Agents","content":"Abstract the pattern: Generator (LLM, probabilistic) + Verifier (deterministic, domain-specific). This appears everywhere: code agents (LLM writes, interpreter runs), o1/o3 thinking models (internal reasoning + verification), scientific discovery. The design principle: never trust the LLM to verify its own outputs. Build the verifier separately.","dur":"2:00"},{"name":"Call to Action","content":"Question to answer before building your next agent: what is your verifier? Link to 3Blue1Brown's AlphaGeometry video for the full technical walkthrough. Subscribe for weekly AI architecture breakdowns.","dur":"1:00"}],"key_points":["Pre-AI symbolic baseline (18/30) is the most underreported part of the AlphaGeometry story — symbolic AI is more powerful than most people realize","The creative/logical brain architecture is the key structural innovation: probabilistic generation + deterministic verification","Synthetic data generation via the verifier is a generalizable approach to data scarcity in specialized domains","The progression from 7/30 to gold-level performance maps directly to architectural choices, not just more compute","The agent design principle: build your verifier before you build your generator"],"sources":[{"title":"The AI that solved IMO Geometry Problems | Guest video by @Aleph 0","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=4NlrfOl0l8U"}],"broll":["Animated geometry diagrams showing auxiliary construction appearing mid-proof","Progress bar visualization: DD (7/30) → DD+AR (14/30) → AlphaGeometry (25/30) → Gold animating upward","Animated loop: LM → auxiliary construction → DD+AR logic → repeat","Synthetic data generation visualization: random points → theorem deduction → erase → problem statement","Split screen: 'Creative Brain' (LLM icon) vs 'Logical Brain' (equation/rule icon)"],"cta":"If this changed how you think about agent architecture, share it with someone building AI systems. And subscribe — next video: why the $10 GPT-2 reproduction changes everything about AI startup strategy."},{"title":"I Reproduced GPT-2 for $10. Here's What It Actually Means.","thumbnail":{"emoji":"🎬","concept":"A GPU with a '$10 bill' icon overlaid. Text: 'GPT-2 From Scratch.' Karpathy's YouTube thumbnail for the reproduction video as background reference. Bold, tech aesthetic."},"format":"explainer","duration_min":15,"hook":"In 2019, OpenAI trained GPT-2 and it was a big deal. In 2024, Andrej Karpathy published a 4-hour tutorial showing you how to reproduce the same 124-million parameter model in one hour for about ten dollars on cloud compute. I want to spend the next 15 minutes unpacking what that cost curve means — not the engineering, but the strategic implications for every AI startup and every builder in this audience.","structure":[{"name":"What He Actually Built","content":"GPT-2 124M: 12 transformer layers, 768 embedding dimensions, 12 attention heads, 50,257 token vocabulary. Matching OpenAI's 2019 validation loss. The training hardware: one or a few A100 GPUs, ~1 hour. The cost: roughly $10 on cloud spot instances. This is not a toy — it's the actual 2019 state-of-the-art.","dur":"1:30"},{"name":"The Optimization Stack (Non-Technical)","content":"Four techniques that made this possible: (1) torch.compile — eliminates Python interpreter overhead, 2.3x speedup from one line of code. (2) FlashAttention — reduces GPU memory round trips, 2-3x faster attention. (3) bf16 precision — half the memory of fp32, 2x throughput. (4) Gradient accumulation — simulates large batches without proportional memory cost. Cumulative: 10-15x vs naive code. Animation: speedometer going from 100 to 1,500 tokens/second.","dur":"2:00"},{"name":"The Cost Curve","content":"2019 GPT-2 training: serious compute, significant cost at the time. 2023 Llama 2 70B: $2M, 6000 GPUs, 12 days. 2024: GPT-2 quality for $10. 2025 direction: GPT-3 level capability (<$1000?) within reach for individuals. Show cost curve visualization. The Moore's Law equivalent for AI training: roughly 10x cost efficiency every 2 years.","dur":"2:00"},{"name":"What This Means: The Moat Question","content":"If anyone can train GPT-2 quality for $10, what's the moat? Answer: it's not compute. The moat is: (1) training data — proprietary, hard to replicate, (2) RLHF process — the fine-tuning pipeline that creates the assistant persona, (3) evaluation infrastructure — knowing what 'better' looks like for your specific domain. Compute is the commodity. Data and evaluation are the scarce resources.","dur":"2:00"},{"name":"The Domain-Specific Model Opportunity","content":"The startup thesis that falls out of falling compute costs: train a domain-specific model on your proprietary data and beat GPT-4 on your narrow use case. Examples from the field: medical coding models beating GPT-4 on clinical notes, legal contract models beating GPT-4 on specific contract types. The Chinchilla insight: optimal training ratio means a smaller model trained on more domain-specific data can beat a larger general model.","dur":"2:00"},{"name":"Three Strategic Moves for Builders","content":"(1) Start collecting proprietary training data now — this is your moat, not your model. (2) Benchmark your use case against both GPT-4 and a fine-tuned smaller model — the cost/quality trade-off often favors fine-tuning. (3) Invest in your evaluation infrastructure — you can only improve what you can measure. The builders who understand this curve will have a 2-year advantage over those who don't.","dur":"2:00"}],"key_points":["GPT-2 2019 state-of-the-art is now a $10 weekend project — the training cost curve is real and accelerating","torch.compile + FlashAttention + bf16 + gradient accumulation stack delivers 10-15x speedup — these are not exotic techniques","The moat in AI is proprietary training data and RLHF process, not compute — this conclusion becomes clearer as compute commoditizes","Domain-specific smaller models regularly beat GPT-4 on narrow tasks when trained on the right data","Evaluation infrastructure is the most underinvested capability in most AI companies"],"sources":[{"title":"Let's reproduce GPT-2 (124M)","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=l8pRSuU81PU"},{"title":"[1hr Talk] Intro to Large Language Models","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=zjkBMFhNj_g"}],"broll":["Animated cost curve graph: 2019 → 2021 → 2023 → 2024 training cost per GPT-2 equivalent","Screen recording: Karpathy's terminal showing training tokens/second before and after torch.compile","GPU memory bandwidth diagram: HBM vs on-chip SRAM, showing the round-trip cost","Simple table: GPT-4 score vs fine-tuned small model score on medical/legal tasks","Animated speedometer: 100 → 300 → 700 → 1500 tokens/second as each optimization stacks"],"cta":"If you're building an AI product and haven't seriously looked at fine-tuning, this week's homework is to open Karpathy's reproduction video and get a GPU instance running. The link is in the description. Like and subscribe for weekly AI strategy breakdowns."},{"title":"The Attention Mechanism Explained in 8 Minutes (No Math Degree Required)","thumbnail":{"emoji":"🎬","concept":"A simple network diagram with glowing connections between words, showing some connections brighter than others. Text overlay: 'How Attention Works.' Bright, educational aesthetic."},"format":"explainer","duration_min":10,"hook":"The attention mechanism is the single most important innovation in modern AI. It's in GPT, it's in Gemini, it's in Claude, it's in the image models that generate your videos. Andrej Karpathy spent three hours teaching it from scratch in his 'Build GPT' video. I'm going to give you the core intuition in 8 minutes — and by the end, you'll understand why OpenAI named their flagship model after it.","structure":[{"name":"The Problem Attention Solves","content":"The naive approach (from makemore): average over all previous tokens. The problem: 'I love the city of Paris, its history is' — when predicting the next word, the simple average treats 'I' and 'Paris' as equally relevant. But 'Paris' should dominate the prediction. Attention is the mechanism that learns which tokens are relevant to which other tokens.","dur":"1:30"},{"name":"The Query, Key, Value Framework","content":"Every token has three learned vectors: a Query ('what am I looking for?'), a Key ('what do I contain?'), and a Value ('what should I pass forward?'). Attention score between two tokens = Query_A · Key_B. High score = A and B are relevant to each other. The final output: a weighted average of all Value vectors, weighted by attention scores. Animation: tokens querying each other, scores lighting up on relevance.","dur":"2:00"},{"name":"Causal Masking","content":"The causal constraint: during training, token N can only look at tokens 1 through N. No peeking at future tokens. This is implemented by masking (setting to -infinity) all future attention scores before the softmax. Why this matters: it's what makes GPT a text generator rather than just a text classifier. Animated triangular mask on the attention matrix.","dur":"1:15"},{"name":"Multi-Head Attention","content":"One head asks one question. GPT uses 12 attention heads in parallel. Each head learns a different type of relationship: one might track subject-verb agreement, one might track pronoun-antecedent relationships, one might track positional proximity. Their outputs are concatenated and projected. This is why transformers are so expressive: 12 parallel questions about the same context.","dur":"1:30"},{"name":"The Bag of Words to Attention Leap","content":"The key insight from Karpathy's makemore series: the jump from simple averaging (bag of words) to attention is the jump from 'take the average of everything' to 'learn which things to average.' The mathematical implementation is the same (weighted average), but the weights are learned rather than uniform. This is the core innovation of the 2017 'Attention Is All You Need' paper.","dur":"1:30"},{"name":"Why 'Attention Is All You Need'","content":"The 2017 paper by Vaswani et al. eliminated RNNs and convolutions entirely and used only attention. The counterintuitive result: pure attention mechanisms train faster, parallelize better, and generalize better than hybrid architectures. Five years later, this architecture took over all of AI — not just NLP but vision, audio, multimodal, and more. The GPT series is fundamentally 'attention stacked 12-96 times'.","dur":"1:15"}],"key_points":["Attention is a learned weighted average — the key word is 'learned,' which is what distinguishes it from simple averaging","Query/Key/Value is the fundamental abstraction: what am I looking for? What do I have? What do I contribute?","Causal masking is what makes autoregressive text generation possible — no future information leaks into current predictions","Multi-head attention is 12 parallel questions being asked simultaneously — it's why transformers are so expressive","The 'Attention Is All You Need' insight: you don't need recurrence or convolution — attention plus feed-forward is sufficient"],"sources":[{"title":"Let's build GPT: from scratch, in code, spelled out.","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=kCc8FmEb1nY"},{"title":"The spelled-out intro to language modeling: building makemore","channel":"Andrej Karpathy","url":"https://www.youtube.com/watch?v=PaCmpygFfXo"}],"broll":["Animated attention visualization: words with brightness proportional to attention score (like BertViz style)","Animated Query-Key dot product: two vectors approaching each other, score value appearing","Triangular causal mask animation: greying out the upper triangle of the attention matrix","Multi-head animation: 12 parallel attention heads, each highlighting different word relationships","Side by side: bag-of-words (uniform weights) vs attention (learned weights) — same words, different emphasis"],"cta":"Now you understand attention. Next video I'll show you how transformers stack attention layers to build GPT. Subscribe so you don't miss it. Drop a comment: which part of AI architecture do you want me to break down next?"},{"title":"The Enterprise AI Quality Gap: Why Your AI Coding Tool Will Slow You Down by Month Three","thumbnail":{"emoji":"🎬","concept":"A line graph that shoots up in month 1, stays flat in month 2, and crashes in month 3. Text overlay: 'The Month 3 Collapse.' Bold warning-red aesthetic."},"format":"deep_dive","duration_min":14,"hook":"Carnegie Mellon studied what happens when enterprise engineering teams start using Cursor for AI-assisted coding. Month 1: velocity up 300-500%. Month 2: complexity climbing, warnings increasing, but nobody's worried yet. Month 3: velocity is back to baseline, teams are fixing bugs they don't understand in code they didn't fully write. Tom Howlett from Sonar calls this the enterprise quality gap. Today I'm going to show you exactly what causes it — and what you can do about it before it happens to your team.","structure":[{"name":"The CMU Data","content":"Recreate the CMU chart: velocity metric over 3 months with the three phases clearly labeled. The three simultaneous trends: velocity up, complexity up, static analysis warnings up. The convergence: around week 10-12, velocity crashes. The causal mechanism: technical debt accumulates faster than review catches it, until it consumes all the velocity gain.","dur":"1:30"},{"name":"Why This Happens: The LLM Optimization Gap","content":"LLMs are trained with RLHF to produce code that passes tests and looks correct in the short term. They are not trained to optimize for 6-month maintainability, minimal complexity, or security. The training signal is 'does a human reviewer like this?' not 'does this hold up under production conditions?' This isn't a model failure — it's a training objective mismatch.","dur":"1:30"},{"name":"The <50K Line Threshold","content":"Howlett's finding: LLM code works well for short-lived internal tools and apps under 50K lines. The failure cases are mission-critical production applications with: (1) many potential adversarial users, (2) long expected lifespan, (3) many contributors over time. Visual: a simple 2x2 of lifespan vs. scale, with the 'safe' and 'risky' zones marked.","dur":"1:15"},{"name":"The Sonar Benchmark Surprise","content":"Sonar benchmarked every major LLM on 4,000 coding tasks — not just correctness (pass rate) but complexity, security vulnerabilities, bugs, and maintainability. The surprising finding: every model has a completely different quality profile. Thinking modes change the profile. Model versions change the profile. There is no consistently 'safe' model — you must benchmark your own use case.","dur":"1:30"},{"name":"The Two-Track Solution","content":"Track A (move fast, don't look back): internal tools, scripts, prototypes, <50K lines, short expected lifespan — full AI velocity, minimal gates. Track B (build to last): production systems, customer-facing, regulated, large codebase — AI assistance with mandatory quality gates before merge: complexity score threshold, security scan, maintainability check. The key is deciding at project inception which track you're on.","dur":"1:30"},{"name":"Three Actions This Week","content":"(1) Add complexity and security scanning to your CI/CD pipeline — Sonar has a free tier. (2) Have the Track A / Track B conversation with your team before the next sprint. (3) Set a complexity budget for AI-generated code — treat rising complexity scores as a leading indicator, not a lagging one. These three things take less than a day and prevent the month-3 crash.","dur":"1:30"}],"key_points":["The CMU Cursor study is real data showing velocity +300% in month 1, collapse by month 3 — this is a documented pattern, not speculation","LLMs are optimized for short-term code quality signals, not long-term maintainability — this is a training objective issue, not a capability gap","The <50K line threshold is a useful heuristic: under that, LLM code is generally fine; over it, you need different gates","Every model has a different quality profile — benchmark yours, don't assume the 'best' model is safest","The two-track model (internal tools vs. production code) is actionable today without new tools"],"sources":[{"title":"AI Dev 26 x SF | Tom Howlett: Can LLMs Generate Enterprise Quality Code?","channel":"DeepLearning.AI","url":"https://www.youtube.com/watch?v=Z_pCTBtCmck"}],"broll":["Animated line chart: the CMU velocity curve animating over 12 weeks with complexity/warnings overlaid","Simple 2x2 grid: lifespan (short/long) vs scale (small/large) with color-coded risk zones","Screen recording: Sonar dashboard showing complexity score and security warnings","Two-track visual: side-by-side workflow diagrams for Track A vs Track B","Animated CI/CD pipeline with quality gates adding to the Track B pipeline"],"cta":"Share this with your engineering team before the month-3 crash, not after. Drop in the comments: has your team hit this wall? I want to hear the real stories. Subscribe for weekly AI engineering breakdowns."},{"title":"How AI Image and Video Generation Actually Works (The Physics Connection Nobody Explains)","thumbnail":{"emoji":"🎬","concept":"Noisy static on the left, photorealistic astronaut video on the right, with an arrow and 'DIFFUSION' in the middle. Text: 'The Physics Behind Stable Diffusion.' Clean, visual."},"format":"explainer","duration_min":14,"hook":"Every time you generate an image with Midjourney or a video with Sora, you're running physics backwards. Specifically, you're reversing Brownian motion — the same random walk that molecules make when they diffuse through a fluid. The connection is not metaphorical. The math is literally the same. Understanding this connection will give you better intuitions for why these models behave the way they do, why they fail when they do, and why the research is advancing in the directions it's advancing.","structure":[{"name":"Start With the Output","content":"WAN 2.1 open-source video model: starts with a tensor of pure random noise. Passed into a transformer. After 50 iterations of refinement, becomes a photorealistic video. Show the progression: iteration 5 → 10 → 20 → 30 → 40 → 50. The question: what is the transformer actually doing at each step?","dur":"1:15"},{"name":"Brownian Motion and Forward Diffusion","content":"The physics analogy: ink dropped into water. Each particle takes a random walk (Brownian motion). Eventually uniform distribution. In image terms: start with a real image, add Gaussian noise at each step. After enough steps, you have pure noise. This is the 'forward diffusion process' — destroying information systematically. It was described mathematically by Einstein in 1905.","dur":"1:30"},{"name":"Reversing the Process: Score Matching","content":"The insight from the 2020 DDPM paper (Ho et al.): train a neural network to predict the reverse of each diffusion step. Given a slightly noisy image at time T, predict what it looked like at time T-1. The mathematical tool: score functions (gradients of the log probability of the data). Why this is non-trivial: running diffusion backwards is fundamentally unstable without the right formulation.","dur":"1:40"},{"name":"CLIP: Connecting Text and Images","content":"The 2021 OpenAI CLIP paper: train two encoders (text and image) so that matching pairs are close in embedding space, non-matching pairs are far apart. 400 million image-caption pairs. The output: a shared high-dimensional space where 'a photo of a cat' is near the cat image vector. This shared space is what allows text prompts to guide image generation.","dur":"1:30"},{"name":"Classifier-Free Guidance: Why Prompts Work","content":"How text conditioning actually works during generation: the model is run twice at each step — once with the text prompt, once without. The final step moves toward the 'with prompt' direction and away from the 'without prompt' direction. Guidance scale controls this: high guidance = more prompt-adherent but less diverse. Low guidance = more diverse but less prompt-adherent. This is the 'CFG scale' you see in Stable Diffusion UIs.","dur":"1:30"},{"name":"Why This Matters for Using These Tools","content":"Five practical intuitions from the physics: (1) More steps = higher quality (more denoising passes) but slower. (2) High CFG scale forces the model to 'commit' to your prompt — good for specific subjects, bad for organic generation. (3) The model can only generate in the distribution of its training data — adding noise and denoising is always returning toward that distribution. (4) Video models are doing this in 4D (x, y, time, channel) — same math, much more compute. (5) Open-source models like WAN 2.1 and SDXL are genuine research artifacts, not toys.","dur":"1:30"}],"key_points":["Diffusion models literally reverse Brownian motion from physics — the connection is mathematical, not metaphorical","The forward process (adding noise) is trivially easy; the reverse process requires a learned neural network — this asymmetry is the core insight","CLIP is the bridge between language and images — without shared embedding space, text-to-image is impossible","Classifier-free guidance is the mechanism behind CFG scale — understanding it explains why higher CFG = more prompt-adherent but less natural","Video generation is 4D diffusion — same math as images but the compute cost scales with the number of frames"],"sources":[{"title":"But how do AI images and videos actually work? | Guest video by Welch Labs","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=iv-5mZ_9CPY"}],"broll":["WAN 2.1 generation steps 5 → 10 → 20 → 30 → 40 → 50 animated progression","Ink-in-water Brownian motion animation showing diffusion forward","CLIP embedding space visualization: text vectors and image vectors in 3D space","Side by side: CFG scale 3 vs CFG scale 15 on same prompt showing quality/creativity trade-off","Split screen: Stable Diffusion UI with CFG scale slider labeled with the guidance explanation"],"cta":"Next video: how the attention mechanism in transformers works — the same architecture is inside every diffusion model, every LLM, and every multimodal AI system. Subscribe and I'll see you there."},{"title":"Fullstack Agents and the UI Problem Nobody Is Solving","thumbnail":{"emoji":"🎬","concept":"A split screen: on the left, a terminal with raw JSON output; on the right, a beautiful UI that 'grew' from the agent response. Text: 'The Generative UI Problem.' Tech-forward aesthetic."},"format":"deep_dive","duration_min":16,"hook":"Most AI agents output text or JSON. That's the wrong abstraction for users. Real users want UI — buttons, forms, charts, interactive components that emerge from what the agent discovered. Atai Barkai from CopilotKit is building what he calls Generative UI — interfaces that the AI agent assembles in real time based on what it knows. Today I want to explore why this is a harder problem than it looks, what the AG-UI protocol is trying to standardize, and why the next competitive moat in AI products isn't the model — it's the interaction layer.","structure":[{"name":"The User-Interactive Agent Problem","content":"The distinction Barkai makes: fully autonomous agents vs. user-interactive agents (copilots). Most agent research focuses on fully autonomous. But in practice, high-stakes workflows require human oversight at decision points. The copilot pattern: agent does the work, human confirms the action. This requires a dynamic UI that reflects the agent's current state — not a static chat interface.","dur":"1:30"},{"name":"CopilotKit's Three Layers","content":"The three layers Barkai describes: (1) Copilot infrastructure — the connection between agentic backend and user-facing UI. (2) In-app copilot — an AI assistant that can read and modify the app's state in real time. (3) Generative UI — components that the agent spawns dynamically based on what it needs to show. Tens of millions of production interactions. This is not a demo.","dur":"1:30"},{"name":"The AG-UI Protocol","content":"AG-UI as a proposed standard for agent-to-UI communication. The problem it solves: right now, every agent framework (LangGraph, CrewAI, AutoGen, Llama Index) communicates differently with frontends. AG-UI proposes a common protocol. The analogy: what REST was to APIs. Why standardization matters: it decouples agent development from UI development, allowing specialization.","dur":"1:30"},{"name":"Generative UI in Practice","content":"What generative UI actually looks like: an agent is researching a topic and displays a table of results. The user asks for a comparison. The agent generates a chart component dynamically. The user asks for filtering. The agent adds interactive controls. The UI is assembled from a component library on demand. This is fundamentally different from rendering agent output as text — the UI itself is a product of the reasoning.","dur":"2:00"},{"name":"The Frontend-Backend Integration Challenge","content":"Why this is harder than it looks: (1) Type safety — the agent must generate UI components that type-check against the frontend component library. (2) State synchronization — the agent's world model and the UI's state must stay consistent. (3) Rollback — if the agent makes a mistake, the UI must be able to revert. (4) Streaming — UI components need to render progressively as the agent thinks. Each of these is a hard engineering problem.","dur":"1:30"},{"name":"The Competitive Moat Thesis","content":"The strategic argument: as foundation models commoditize (the $10 GPT-2 argument from Karpathy), the differentiation moves to the interaction layer. Teams that invest now in generative UI infrastructure will have a moat that's sticky — users stay because the UI is exceptional, not because the model is marginally better. The product question: what does your agent show users when it knows something they need to act on?","dur":"1:30"}],"key_points":["The fully-autonomous vs. user-interactive agent distinction is critical — most products need the latter, most research focuses on the former","Generative UI means the AI assembles interface components dynamically — not just outputting text that a static UI renders","AG-UI is attempting to be the REST standard for agent-to-UI communication — if it succeeds, it changes how the whole stack is built","Type safety, state sync, rollback, and streaming are the four hard engineering problems in generative UI","As models commoditize, the interaction layer becomes the competitive moat — this is where product differentiation will live"],"sources":[{"title":"AI Dev 26 x SF | Atai Barkai: Fullstack Agents & Generative UI with AG UI","channel":"DeepLearning.AI","url":"https://www.youtube.com/watch?v=EeyLHsND5i0"}],"broll":["Animation: terminal JSON output transforming into a React component — the generative UI concept visualized","Diagram: the three CopilotKit layers as a stack illustration","AG-UI protocol diagram: multiple agent backends connecting through a standard protocol to multiple frontend frameworks","Screen recording: a copilot inserting a chart into a dashboard in real time","Split screen: static chat interface (text output) vs generative UI interface (dynamic components)"],"cta":"The generative UI space is moving fast — subscribe for weekly breakdowns of the frameworks and protocols that will define how AI products are built. And drop in the comments: what agent workflow in your work would most benefit from a generative UI layer?"},{"title":"3Blue1Brown's Math Videos Have a Hidden AI Architecture Lesson","thumbnail":{"emoji":"🎬","concept":"A beautiful geometric spiral transforming into a neural network diagram. Text: 'When Math Becomes Machine Learning.' 3Blue1Brown aesthetic with deep purple/blue gradients."},"format":"deep_dive","duration_min":18,"hook":"Grant Sanderson of 3Blue1Brown has spent years making videos about math that seem totally disconnected from AI — Euler's formula, Laplace transforms, colliding blocks computing pi. But there's a thread running through all of it that connects directly to how modern neural networks work. Today I want to trace that thread — because understanding the math that 3Blue1Brown teaches will give you a deeper intuition for AI than most YouTube AI content ever will.","structure":[{"name":"Why Math Videos Matter for AI Builders","content":"The argument: most AI content teaches you to use the tools. 3Blue1Brown teaches you to understand the underlying mathematics. The thesis: builders who understand the math make better architecture decisions, debug more effectively, and understand failure modes that pure practitioners miss. This video is about building that bridge.","dur":"1:15"},{"name":"Exponentials and the e^(st) Connection","content":"From Euler's Formula / Laplace prelude video: e^t is its own derivative — this is what defines the number e. When you shove complex numbers into the exponent: e^(it) traces a circle in the complex plane. This is the foundation of Fourier transforms, which decompose any signal into sinusoidal components. In AI: Fourier features and position encodings in transformers use complex exponentials. The attention mechanism's positional encodings (RoPE in Llama) are literally e^(i*theta).","dur":"3:00"},{"name":"The Laplace Transform and Context Windows","content":"The Laplace transform: a way to convert functions of time into functions of complex frequency. It makes differential equations algebraic. The connection to AI: the transformer's attention mechanism can be viewed as a type of kernel approximation. State space models (Mamba, Hyena) are explicitly trying to approximate attention using convolutions and transforms from linear systems theory. The Laplace transform is the mathematical machinery behind these architectures.","dur":"2:30"},{"name":"Colliding Blocks, Pi, and Quantum Computing","content":"3Blue1Brown's colliding blocks video: two blocks collide and the total number of collisions equals the digits of pi (times a power of 10). The connection to Grover's algorithm for quantum search. The abstract structure: a random walk in a high-dimensional space, and the answer appears as a geometric invariant. In AI: this is related to how diffusion models work — reverse random walks that preserve geometric properties of the data distribution.","dur":"2:30"},{"name":"AlphaGeometry and Auxiliary Constructions as Symmetry Breaking","content":"The deeper mathematical observation from the AlphaGeometry paper: auxiliary constructions in geometry proofs are symmetry-breaking moves that simplify the problem's topological structure. This is analogous to how attention heads in transformers find 'the right perspective' on a sequence — breaking the rotational symmetry of the raw token positions to reveal structure. The mathematical depth behind 'adding a line to a diagram' and 'computing an attention score' is the same.","dur":"2:00"},{"name":"The Practical Application","content":"Three places where 3Blue1Brown's math shows up in your AI work: (1) Position encodings in LLMs (Euler/Fourier) — why RoPE works and why absolute position encodings break at long contexts. (2) State space models (Laplace/signal theory) — why Mamba claims to be more efficient than attention at long sequences. (3) Diffusion model speed (physics of Brownian motion) — why DDIM sampling needs fewer steps than DDPM.","dur":"2:00"}],"key_points":["e^(it) traces a circle — this single fact underlies Fourier analysis, position encodings in transformers, and state space models","The Laplace transform is the mathematical machinery behind linear attention approximations and state space models like Mamba","The colliding blocks / pi / Grover's algorithm connection is a preview of how geometry and computation are deeply related","AlphaGeometry's auxiliary constructions are mathematically analogous to attention heads finding the right perspective on a sequence","3Blue1Brown's math curriculum is secretly a deep AI education — the connections are real, not metaphorical"],"sources":[{"title":"The Physics of Euler's Formula | Laplace Transform Prelude","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=-j8PzkZ70Lg"},{"title":"But what is a Laplace Transform?","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=j0wJBEZdwLs"},{"title":"Why colliding blocks compute pi","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=6dTyOl1fmDo"},{"title":"The AI that solved IMO Geometry Problems | Guest video by @Aleph 0","channel":"3Blue1Brown","url":"https://www.youtube.com/watch?v=4NlrfOl0l8U"}],"broll":["Animation: e^(it) tracing a circle in the complex plane (classic 3Blue1Brown style)","RoPE position encoding visualization: vectors rotating in pairs as position increases","Colliding blocks animation (the famous 3B1B one) with pi digits appearing","Side by side: Laplace transform graph and attention matrix — visual analogy of both converting time-domain to frequency-domain","3Blue1Brown-style animated diagram of attention head as 'asking a question' about each position"],"cta":"If you want to go deeper on the math: I'll link to the specific 3Blue1Brown videos in the description. Each one will take about an hour but they will permanently change your intuition for how AI systems work. Subscribe for more of these cross-disciplinary deep dives."}];
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderAccordion(icon, label, contentHtml, openByDefault=false) {
+  const id = 'acc-' + Math.random().toString(36).slice(2,8);
+  return `
+    <div class="prod-accordion">
+      <div class="prod-accordion-header ${openByDefault?'open':''}" onclick="toggleAcc(this)">
+        <span class="acc-icon">${icon}</span> ${label}
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="prod-accordion-body ${openByDefault?'open':''}">
+        ${contentHtml}
+      </div>
+    </div>`;
+}
+
+function toggleAcc(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+
+function renderPodcastCard(ep, idx) {
+  const outlineHtml = `<div class="outline-steps">${ep.outline.map((s,i)=>`
+    <div class="outline-step">
+      <div class="outline-step-num">${i+1}</div>
+      <div class="outline-step-content">
+        <div class="outline-step-name">${s.name}</div>
+        <div class="outline-step-desc">${s.desc}</div>
+        <div class="outline-step-dur">⏱ ${s.dur}</div>
+      </div>
+    </div>`).join('')}</div>`;
+
+  const questionsHtml = `<div class="questions-list">${ep.key_questions.map(q=>`
+    <div class="question-item">❓ ${q}</div>`).join('')}</div>`;
+
+  const sourcesHtml = `<div class="sources-list">${ep.sources.map(s=>`
+    <div class="source-item">
+      <div class="source-icon">🎬</div>
+      <div>
+        <div class="source-title">${s.title}</div>
+        <div class="source-channel">${s.channel}</div>
+        <div class="source-insight">${s.insight}</div>
+        <a class="source-link" href="${s.url}" target="_blank">▶ Watch source →</a>
+      </div>
+    </div>`).join('')}</div>`;
+
+  const guestsHtml = ep.guests.map(g=>`<span class="tag">${g}</span>`).join(' ');
+
+  const hookHtml = `<div class="hook-box">"${ep.hook}"</div>`;
+  const ctaHtml = `<div class="hook-box" style="border-left-color:var(--green)">"${ep.cta}"</div>`;
+
+  return `
+    <div class="prod-card" id="podcast-${idx}">
+      <div class="prod-card-header">
+        <div class="prod-card-left">
+          <span class="prod-card-type podcast">🎙️ Podcast Episode ${idx+1}</span>
+          <div class="prod-card-title">${ep.title}</div>
+          <div class="prod-card-tagline">${ep.tagline}</div>
+          <div class="prod-card-meta">
+            <span class="prod-meta-chip format">📋 ${ep.format}</span>
+            <span class="prod-meta-chip duration">⏱ ${ep.duration_min} min</span>
+            <span class="prod-meta-chip">🎬 ${ep.sources.length} source videos</span>
+          </div>
+        </div>
+        <div class="prod-card-actions">
+          <button class="prod-btn copy-btn" onclick="copyCard('podcast',${idx})">📋 Copy</button>
+          <button class="prod-btn" onclick="exportCard('podcast',${idx})">⬇ Export</button>
+        </div>
+      </div>
+      <div class="prod-card-body">
+        ${renderAccordion('🎣','Opening Hook', hookHtml, true)}
+        ${renderAccordion('📋','Full Episode Outline', outlineHtml, true)}
+        ${renderAccordion('❓','Key Questions to Explore', questionsHtml)}
+        ${renderAccordion('🎬','Source Videos', sourcesHtml)}
+        ${renderAccordion('👥','Guest Suggestions', `<div style="padding:4px 0">${guestsHtml}</div>`)}
+        ${renderAccordion('📢','Closing CTA', ctaHtml)}
+      </div>
+    </div>`;
+}
+
+function renderYouTubeCard(vid, idx) {
+  const structureHtml = `<div class="outline-steps">${vid.structure.map((s,i)=>`
+    <div class="outline-step">
+      <div class="outline-step-num">${i+1}</div>
+      <div class="outline-step-content">
+        <div class="outline-step-name">${s.name} <span style="color:var(--accent3);font-size:10px;font-weight:600">${s.dur}</span></div>
+        <div class="outline-step-desc">${s.content}</div>
+      </div>
+    </div>`).join('')}</div>`;
+
+  const pointsHtml = `<div class="questions-list">${vid.key_points.map(p=>`
+    <div class="question-item">✅ ${p}</div>`).join('')}</div>`;
+
+  const sourcesHtml = `<div class="sources-list">${vid.sources.map(s=>`
+    <div class="source-item">
+      <div class="source-icon">🎬</div>
+      <div>
+        <div class="source-title">${s.title}</div>
+        <div class="source-channel">${s.channel}</div>
+        <a class="source-link" href="${s.url}" target="_blank">▶ Watch source →</a>
+      </div>
+    </div>`).join('')}</div>`;
+
+  const thumbnailHtml = `<div class="thumbnail-box">
+    <div class="thumbnail-preview">${vid.thumbnail.emoji}</div>
+    <div class="thumbnail-desc">${vid.thumbnail.concept}</div>
+  </div>`;
+
+  const brollHtml = `<div class="questions-list">${vid.broll.map(b=>`
+    <div class="question-item">🎥 ${b}</div>`).join('')}</div>`;
+
+  const hookHtml = `<div class="hook-box">"${vid.hook}"</div>`;
+
+  return `
+    <div class="prod-card" id="youtube-${idx}">
+      <div class="prod-card-header">
+        <div class="prod-card-left">
+          <span class="prod-card-type youtube">📹 YouTube Video ${idx+1}</span>
+          <div class="prod-card-title">${vid.title}</div>
+          <div class="prod-card-meta">
+            <span class="prod-meta-chip format">📋 ${vid.format}</span>
+            <span class="prod-meta-chip duration">⏱ ${vid.duration_min} min</span>
+            <span class="prod-meta-chip">🎬 ${vid.sources.length} source videos</span>
+          </div>
+        </div>
+        <div class="prod-card-actions">
+          <button class="prod-btn copy-btn" onclick="copyCard('youtube',${idx})">📋 Copy</button>
+          <button class="prod-btn" onclick="exportCard('youtube',${idx})">⬇ Export</button>
+        </div>
+      </div>
+      <div class="prod-card-body">
+        ${renderAccordion('🎣','Opening Hook (First 15s)', hookHtml, true)}
+        ${renderAccordion('🖼️','Thumbnail Concept', thumbnailHtml, true)}
+        ${renderAccordion('📋','Full Video Structure', structureHtml, true)}
+        ${renderAccordion('✅','Key Talking Points', pointsHtml)}
+        ${renderAccordion('🎬','Source Videos', sourcesHtml)}
+        ${renderAccordion('🎥','B-Roll Suggestions', brollHtml)}
+        ${renderAccordion('📢','End Screen CTA', `<div class="hook-box" style="border-left-color:var(--green)">"${vid.cta}"</div>`)}
+      </div>
+    </div>`;
+}
+
+// Render all cards
+document.getElementById('podcast-plans-container').innerHTML = PODCAST_PLANS.map((ep,i)=>renderPodcastCard(ep,i)).join('');
+document.getElementById('youtube-plans-container').innerHTML = YOUTUBE_PLANS.map((v,i)=>renderYouTubeCard(v,i)).join('');
+document.getElementById('podcast-count').textContent = PODCAST_PLANS.length;
+document.getElementById('yt-count').textContent = YOUTUBE_PLANS.length;
+
+// ============================================================
+// COPY & EXPORT
+// ============================================================
+
+function formatPodcastAsText(ep, idx) {
+  return `PODCAST EPISODE ${idx+1}: ${ep.title}
+${'='.repeat(60)}
+TAGLINE: ${ep.tagline}
+FORMAT: ${ep.format} | DURATION: ${ep.duration_min} min
+
+OPENING HOOK:
+"${ep.hook}"
+
+EPISODE OUTLINE:
+${ep.outline.map((s,i)=>`${i+1}. ${s.name} (${s.dur})
+   ${s.desc}`).join('\n')}
+
+KEY QUESTIONS:
+${ep.key_questions.map((q,i)=>`${i+1}. ${q}`).join('\n')}
+
+SOURCE VIDEOS:
+${ep.sources.map(s=>`• ${s.title} — ${s.channel}\n  ${s.url}\n  Key insight: ${s.insight}`).join('\n')}
+
+GUEST SUGGESTIONS:
+${ep.guests.map(g=>`• ${g}`).join('\n')}
+
+CLOSING CTA:
+"${ep.cta}"
+`;
+}
+
+function formatYouTubeAsText(vid, idx) {
+  return `YOUTUBE VIDEO ${idx+1}: ${vid.title}
+${'='.repeat(60)}
+FORMAT: ${vid.format} | DURATION: ${vid.duration_min} min
+THUMBNAIL: ${vid.thumbnail.concept}
+
+OPENING HOOK (First 15s):
+"${vid.hook}"
+
+VIDEO STRUCTURE:
+${vid.structure.map((s,i)=>`${i+1}. ${s.name} [${s.dur}]
+   ${s.content}`).join('\n')}
+
+KEY TALKING POINTS:
+${vid.key_points.map((p,i)=>`${i+1}. ${p}`).join('\n')}
+
+SOURCE VIDEOS:
+${vid.sources.map(s=>`• ${s.title} — ${s.channel}\n  ${s.url}`).join('\n')}
+
+B-ROLL IDEAS:
+${vid.broll.map(b=>`• ${b}`).join('\n')}
+
+END SCREEN CTA:
+"${vid.cta}"
+`;
+}
+
+function showToast(msg) {
+  let t = document.querySelector('.toast');
+  if (!t) { t = document.createElement('div'); t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function copyCard(type, idx) {
+  const text = type === 'podcast' ? formatPodcastAsText(PODCAST_PLANS[idx], idx) : formatYouTubeAsText(YOUTUBE_PLANS[idx], idx);
+  navigator.clipboard.writeText(text).then(()=>showToast('✓ Copied to clipboard!'));
+}
+
+function exportCard(type, idx) {
+  const text = type === 'podcast' ? formatPodcastAsText(PODCAST_PLANS[idx], idx) : formatYouTubeAsText(YOUTUBE_PLANS[idx], idx);
+  const plan = type === 'podcast' ? PODCAST_PLANS[idx] : YOUTUBE_PLANS[idx];
+  const filename = `${type}_${(plan.title.slice(0,40)).replace(/[^a-z0-9]/gi,'_').toLowerCase()}.txt`;
+  const blob = new Blob([text], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  showToast('✓ Downloaded!');
+}
+
+function copyAll(type) {
+  const all = type === 'podcast'
+    ? PODCAST_PLANS.map((ep,i)=>formatPodcastAsText(ep,i)).join('\n\n' + '='.repeat(60) + '\n\n')
+    : YOUTUBE_PLANS.map((v,i)=>formatYouTubeAsText(v,i)).join('\n\n' + '='.repeat(60) + '\n\n');
+  navigator.clipboard.writeText(all).then(()=>showToast(`✓ All ${type} plans copied!`));
+}
+
+function exportAll(type) {
+  const all = type === 'podcast'
+    ? PODCAST_PLANS.map((ep,i)=>formatPodcastAsText(ep,i)).join('\n\n' + '='.repeat(60) + '\n\n')
+    : YOUTUBE_PLANS.map((v,i)=>formatYouTubeAsText(v,i)).join('\n\n' + '='.repeat(60) + '\n\n');
+  const blob = new Blob([all], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `all_${type}_plans_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  showToast(`✓ All ${type} plans exported!`);
+}
+</script>
+
+</body>
+</html>
