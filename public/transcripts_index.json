@@ -252,6 +252,15 @@
     "preview": "Copy fail 732 bytes to route on every major Linux distro. Copy fail 2 electric bugaloo unprivileged Linux LP via Xfirm. Dirty frag universal Linux LPE breaking 84 Tanstack npm packages were compromised in an ongoing supply chain attack. Damned OB a publicly disclosed yet to be patched attack that le"
   },
   {
+    "video_id": "taCVT5vDAk0",
+    "title": "TiDAR: Think in Diffusion, Talk in Autoregression (Paper Analysis)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 6842,
+    "url": "https://youtube.com/watch?v=taCVT5vDAk0",
+    "preview": "Hello, today we're looking at TiDaR Thinking Diffusion Talk and Autoregression by researchers at Nvidia. And this is a really cool paper because it effectively um makes good you already observes that we don't have full GPU utilization during autoregressive large language model inference um because i"
+  },
+  {
     "video_id": "iv-5mZ_9CPY",
     "title": "But how do AI images and videos actually work? | Guest video by Welch Labs",
     "channel": "3Blue1Brown",
@@ -286,6 +295,24 @@
     "words": 6154,
     "url": "https://youtube.com/watch?v=Z_pCTBtCmck",
     "preview": "So the big question can LLM generate enterprise quality code. So obviously we've seen a big change in engineer in software engineering particularly in code generation. Andre Kaposy has put it really nicely. I'm sure all of you have experienced it. It's super nice. We generate code, it it works, it f"
+  },
+  {
+    "video_id": "80vV6fGIlWo",
+    "title": "AI Dev 26 x SF | Jerry Liu: My Agent Can't Read a PDF?",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 6094,
+    "url": "https://youtube.com/watch?v=80vV6fGIlWo",
+    "preview": "Hey everyone. Uh, good to be here. Uh, I'm Jerry, co-founder, CEO of Llama Index. Uh, for those of you who might not have heard of us before, uh, today we're basically focused all on building the best-in-class agentic document infrastructure. If you've heard of us before, we started off as a pretty"
+  },
+  {
+    "video_id": "Nao16-6l6dQ",
+    "title": "[Paper Analysis] The Free Transformer (and some Variational Autoencoder stuff)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 5820,
+    "url": "https://youtube.com/watch?v=Nao16-6l6dQ",
+    "preview": "Hello there. Today we are looking at the free transformer from France Fur at Farret Meta. This transformer is extending the classic decoderbased transformer with uh a series of latent variables that can be used to kind of make underlying decisions about the sequence to be generated. So for example a"
   },
   {
     "video_id": "gILMoijqeGA",
@@ -342,6 +369,42 @@
     "preview": "In 2019, I put out a video about how two colliding blocks can compute pi. It's very fun, very surprising, and if you include the adaptations into shorts that I've posted since then, it is the most popular thing that I've put on the internet, and by a pretty wide margin. This year, for Pi Day, I want"
   },
   {
+    "video_id": "hsy02uiKcAM",
+    "title": "AI Dev 26 x SF | João Moura: Building Recurring, Governed, and Embedded Enterprise Workflows",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 5249,
+    "url": "https://youtube.com/watch?v=hsy02uiKcAM",
+    "preview": "So, uh let me start with uh one thing that there's so much to unpack on this talk and we don't have enough time. So, we're going to be rushing for a hot second, but it's going to be fun. And the idea here is I I tried to fit the entire title of this talk in one slide and I couldn't. So, I tried some"
+  },
+  {
+    "video_id": "wKAeqSfIX5g",
+    "title": "AI Dev 26 x SF | Diamond Bishop: The Next 100 Agents. Building the Agent Native Office",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 5185,
+    "url": "https://youtube.com/watch?v=wKAeqSfIX5g",
+    "preview": "I'm going to talk to you a little bit about what does it really mean for you to expand from just building one or two agents for your company to building hundreds, you know, the next order of magnitude. And I'll be telling you a little bit about what we've learned at DataDog building our first set of"
+  },
+  {
+    "video_id": "fAfuQN0WwFE",
+    "title": "AI Dev 26 x SF | Ara Khan: Evals Are Broken Use Them Anyway",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 5129,
+    "url": "https://youtube.com/watch?v=fAfuQN0WwFE",
+    "preview": "I'm Era. I'm going to be talking about eval uh specifically u AI evals like coding agent evals and stuff. And I'm going to talk about how they're broken and how you could still use them. Anyway, uh before I start, I just I want to say one thing. It's just like it boggles my mind when when you're lik"
+  },
+  {
+    "video_id": "v67plFw1nMw",
+    "title": "Titans: Learning to Memorize at Test Time (Paper Analysis)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 5111,
+    "url": "https://youtube.com/watch?v=v67plFw1nMw",
+    "preview": "[snorts] Hello. Today we're going to look at Titans learning to memorize at test time. This is a paper by Google research and has been pushed as part of their Nurips publications. So there's a blog post about it and people posted on social media about it and um I have to admit I just fell for the ma"
+  },
+  {
     "video_id": "hFMaT9oRbs4",
     "title": "Terence Tao continuing history’s cleverest cosmological measurements",
     "channel": "3Blue1Brown",
@@ -349,6 +412,15 @@
     "words": 5057,
     "url": "https://youtube.com/watch?v=hFMaT9oRbs4",
     "preview": "This animation is zooming out by a factor of 10 every 2 seconds. Maybe you've seen things like this before, conveying the mind-boggling scale of our universe, but here, in this video, you and I are going to continue the saga through the many moments of delightful ingenuity throughout Human history t"
+  },
+  {
+    "video_id": "_w3WSNr6lO4",
+    "title": "AI Dev 26 x SF | Brandon Waselnuk: Building the Context Engine AI Agents Need",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 4983,
+    "url": "https://youtube.com/watch?v=_w3WSNr6lO4",
+    "preview": "Hello and welcome. I'm Brandon and we're going to be talking about building the context engine AI agents need. >> You're working with a lot of agents and those agents are doing things that you either don't want them to do or you're tired when they finish trying to do a code output and you go, \"No, C"
   },
   {
     "video_id": "1p334v40npw",
@@ -369,6 +441,15 @@
     "preview": "In real life we have to use this kind of mapping this kind of huristic custom approaches to retrieve the relevant context. If the context is out of context window you have to do pruning summarization all those techniques. How do we reduce the manual labor of these junior associates so that they coul"
   },
   {
+    "video_id": "C5oYk1bn4_o",
+    "title": "AI Dev 26 x SF | Daniel Beutel: Flower SuperGrid Agents",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 4515,
+    "url": "https://youtube.com/watch?v=C5oYk1bn4_o",
+    "preview": "I'm here today to talk about a new frontier that we see opening in AI. That frontier is collaborative AI systems. Um that frontier is going to unlock a new category of systems to be built, systems that were not possible before. But before I do that, I just want to say a few words about um who we are"
+  },
+  {
     "video_id": "FE-hM1kRK4Y",
     "title": "Why Laplace transforms are so useful",
     "channel": "3Blue1Brown",
@@ -378,6 +459,15 @@
     "preview": "I want to show you this simple simulation that I put together that has a mass on a spring, but it's being influenced by an external force that oscillates back and forth. Now, if there was no external force and you pull out this mass and you just let it go, the spring has some kind of natural frequen"
   },
   {
+    "video_id": "huAwz_BR8WM",
+    "title": "DeepMind’s Insane AI Breakthroughs With CEO Demis Hassabis",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 4271,
+    "url": "https://youtube.com/watch?v=huAwz_BR8WM",
+    "preview": "weak and easy questions. Please try to answer in one sentence, sometimes one word. >> Oh, wow. That's hard. Um, >> Fineman or Newton. >> Oh, wow. That's even harder. >> Dennis, I don't know if I told you, but my mother recently got some health scan results. It was a massive video file, and we had to"
+  },
+  {
     "video_id": "Ca-BkMeRJ74",
     "title": "AI tools Landscape in 2026 | Free Tools vs Paid Tools",
     "channel": "Codebasics",
@@ -385,6 +475,24 @@
     "words": 4157,
     "url": "https://youtube.com/watch?v=Ca-BkMeRJ74",
     "preview": "If you have clicked this video to understand the AI landscape of 2026 in terms of what tools are available out there and which one you need to learn in order to stay high in your job or to have a better career prospectus this video is for you. Like I said, there are too many tools out there, right?"
+  },
+  {
+    "video_id": "MlVuNCP9uxs",
+    "title": "AI Dev 26 x SF | Manos Koukoumidis & Stefan Webb: VibeML: Build your AI model in hours, not months",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 4150,
+    "url": "https://youtube.com/watch?v=MlVuNCP9uxs",
+    "preview": "So enterprise AI is changing and it's changing very fast. Enterprises are moving faster and faster from generic intelligence that they rent to specialized intelligence that they own. when the whole Genai wave started in November of 2022 when Zazib came out then 2023 all the way to early 2025 enterpr"
+  },
+  {
+    "video_id": "n366hY4JZ9U",
+    "title": "AI Dev 26 x SF | Paul Everitt: The Shift to Agentic Engineering",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 4133,
+    "url": "https://youtube.com/watch?v=n366hY4JZ9U",
+    "preview": "Today we are going to hear about uh the shift towards agentic engineering and increased code output. Uh welcome Paul. >> One minute into this conference, Jonathan said let's talk about the future of software engineering. Let's have a conversation. Let's figure it out. That's exactly what we're going"
   },
   {
     "video_id": "dgbdyxe435E",
@@ -441,6 +549,15 @@
     "preview": "Before I show you my talk on what is my value that I gave at Omicron, I wanted to give like a little bit of a precursor, a little bit of kind of setting up here so you understand what's happening. So, Omicron just got done taking place in New York. The conference was awesome. The talks were awesome."
   },
   {
+    "video_id": "ycKLqk5tezw",
+    "title": "AI Dev 26 x SF | Luke Kim: The Agent Data Stack—Why Every AI Agent Needs Its Own Data Stack",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 3229,
+    "url": "https://youtube.com/watch?v=ycKLqk5tezw",
+    "preview": "Hi everybody. Uh my name is Luke Kim. I'm the founder and CEO of Spice AI. Uh we are a data and AI infrastructure startup out of Belleview. Uh we build an open source project uh which is a data platform for AI context. Um which I will show you soon. So if you think about the SAS era uh of the last 1"
+  },
+  {
     "video_id": "Dlsa9EBKDGI",
     "title": "Where my explanation of Grover’s algorithm failed",
     "channel": "3Blue1Brown",
@@ -448,6 +565,15 @@
     "words": 3193,
     "url": "https://youtube.com/watch?v=Dlsa9EBKDGI",
     "preview": "Last week I put up a video introducing quantum computing, and in the final section we were stepping through something known as Grover's algorithm. And based on the comments that I saw, I think there was a very common point of confusion that reveals I clearly could have done a better job explaining a"
+  },
+  {
+    "video_id": "L_47rVSuwBU",
+    "title": "AI Dev 26 x SF | Andrew Filev: Multi Model Pipelines—How to Get Better AI Results for Less",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 3090,
+    "url": "https://youtube.com/watch?v=L_47rVSuwBU",
+    "preview": "Uh Andrew here from Zenoder. So today we're going to talk about uh some very interesting results from our internal lab team that we first kind of tested on different benchmark and evals and then um on our own team being guinea pigs where we got about 50 engineers and then happily rolling out across"
   },
   {
     "video_id": "EeyLHsND5i0",
@@ -466,6 +592,24 @@
     "words": 3075,
     "url": "https://youtube.com/watch?v=-OkR0cpmD9k",
     "preview": "For your AI career, you need projects [music] that are inspired by production grade AI systems. Systems that uses rag, multimodal inputs, agentic architecture, and real-world integrations. In this video, I'm going to share such five projects that you can build [music] in year 2026. These are not ran"
+  },
+  {
+    "video_id": "CXd0kDikK0U",
+    "title": "AI Dev 26 x SF | Or Dagan: Optimizing Accuracy, Cost, and Latency in Real-World Agents",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 2867,
+    "url": "https://youtube.com/watch?v=CXd0kDikK0U",
+    "preview": "We're trying to optimize that uh vicious cycle of accuracy, cost, latency. Uh and you know it always feels like you can't really have all three. Uh you optimize for one, add another one the the last one drops. So that would be what I will be talking about today. How can we optimize accuracy, cost, a"
+  },
+  {
+    "video_id": "ODvRuSy5loE",
+    "title": "AI Dev 26 x SF | Andrew K.  Davies: Deterministic Memory: How to Build an AI That Cannot Lie",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 2807,
+    "url": "https://youtube.com/watch?v=ODvRuSy5loE",
+    "preview": "So, hi everybody. I'm Andrew Davies. I am the CEO and chief bottle washer over at onmemory.ai. You know, I'm not here today to sell you anything. And I'm not looking for investment capital. I came here today to deliver a very important message to all of you. There won't be any demos, just me. And li"
   },
   {
     "video_id": "Idrm5Bp805A",
@@ -513,6 +657,24 @@
     "preview": "[music] Hey, my name is Anu and I'm a part of the Weights and Biases by Coreview team. I'm here to talk to you about Weights and Biases models, a platform designed to be a system of record for all your model training. With just a few lines of code, your team is able to track your end toend ML develo"
   },
   {
+    "video_id": "cnt83ML6-fA",
+    "title": "AI Dev 26 x SF | Andi Partovi: Why Every Agent Needs a Simulation Sandbox",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 2490,
+    "url": "https://youtube.com/watch?v=cnt83ML6-fA",
+    "preview": "So, I'm Andy. I'm the CTO and co-founder of Various AI. Um, I'm going to talk about simulation environments for agents. Now, I'm assuming you're here because you're very interested in agents, but I also do want to see a show of hands. Who here is building AI agents, not just using them? Cool. Yeah,"
+  },
+  {
+    "video_id": "NtvEHHwKdUE",
+    "title": "AI Dev 26 x SF | Thierry Damiba: Edge to Cloud Video Anomaly Detection",
+    "channel": "DeepLearning.AI",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 2477,
+    "url": "https://youtube.com/watch?v=NtvEHHwKdUE",
+    "preview": "Hi, I'm Neil Kanungo. I'm going to be talking to you today about edge to cloud video anomaly detection. Just doing a quick intro because Terry Demibas session at AI Dev did have some audio technical difficulties for the first few minutes. I'm his manager, Deborah leader at Quadrant, and I'm going to"
+  },
+  {
     "video_id": "klAynlP04h0",
     "title": "AI Dev 26 x SF | Idan Raman: The Identity Crisis of Browser Agents",
     "channel": "DeepLearning.AI",
@@ -520,6 +682,15 @@
     "words": 2459,
     "url": "https://youtube.com/watch?v=klAynlP04h0",
     "preview": "Today I'll be speaking about >> [music] >> what we call the identity crisis for browser agents or how can we take human identities and let AI agents use them in a way which is very secure and reliable. So, just a bit about Anchor and about me before we get going. So, I'm Idan Goldman. I'm one of the"
+  },
+  {
+    "video_id": "xHi8PUIVyoo",
+    "title": "I BUILT A FULLY AUTOMATIC MANSPLAINER",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 2419,
+    "url": "https://youtube.com/watch?v=xHi8PUIVyoo",
+    "preview": "Hello, have you ever been in a situation where you're overhearing conversation and it dawns on you this person well-intended is wrong about something minuscule but important to you and duty the universe compels you to tell them why they're wrong. Watch this. I recycle plastic because it's good for t"
   },
   {
     "video_id": "dDkynerzV-Q",
@@ -612,6 +783,15 @@
     "preview": "You don't need a computer science degree in order to use AI, [music] but you need to know these 10 words to use AI effectively. In this video, we are going to go through these 10 AI jargons. We are going to keep it light and fun. Peter keeps on hearing this term AI everywhere, in news, social media,"
   },
   {
+    "video_id": "Sk9tvyRSCgY",
+    "title": "DeepMind’s New AI: A Gift To Humanity",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1588,
+    "url": "https://youtube.com/watch?v=Sk9tvyRSCgY",
+    "preview": "Google DeepMind gave an amazing gift to humanity. \nAnd it is full of surprises. Here’s why. Today,   we are living in the age of AI where these \nsmart assistants and agents can do things   we could only dream of 10 years ago. But. \nMany of these solutions are proprietary,   require a subscription, a"
+  },
+  {
     "video_id": "fjd2hm6-qtM",
     "title": "What is OpenRouter | All about OpenRouter in 10 minutes",
     "channel": "Codebasics",
@@ -630,6 +810,15 @@
     "preview": "Hi, I'm Russ from Weights & Biases, and today I'll be discussing how W&B training serverless SFT, powered by CoreWeave, helps AI engineers use curated data sets for model distillation, customize model output format and style, and warm models up for RL training so they start from a stronger baseline."
   },
   {
+    "video_id": "Io_GqmbNBbY",
+    "title": "DeepMind’s New AI Just Changed Science Forever",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1451,
+    "url": "https://youtube.com/watch?v=Io_GqmbNBbY",
+    "preview": "I appeared on camera for an interview not \nso long ago. And I was really surprised   by how many of you Fellow Scholars said that \nyou would like to see more. So first of all,   thank you so much to all \nof you for the kind words. Second, I thought let's try this and hope that you \nwill enjoy it. De"
+  },
+  {
     "video_id": "gzggLWETGOE",
     "title": "Large-scale agentic quant research with Weights & Biases",
     "channel": "Weights & Biases",
@@ -637,6 +826,78 @@
     "words": 1431,
     "url": "https://youtube.com/watch?v=gzggLWETGOE",
     "preview": "[music] >> Hi. I'm Karan with Weights & Biases by Weights & Biases and today I'll talking about large-scale agentic quant research. I work very closely with quant desk and I hear the same thing everywhere. We can build models but we can't always trust them, reproduce them, or explain them to complia"
+  },
+  {
+    "video_id": "p7K3xfViWCE",
+    "title": "DeepSeek V4 AI Beats Billion Dollar Systems…For Free",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1426,
+    "url": "https://youtube.com/watch?v=p7K3xfViWCE",
+    "preview": "Finally, DeepSeek 4 is here, and it is \ndescribed in a 58-page research paper.   And finally, nothing is held back here. I’ll \nbe honest I am feeling a little shy today,   so I will do classic Two Minute \nPapers, mikrophone, but no camera. This is one of the biggest open \nand free AI models that we"
+  },
+  {
+    "video_id": "Ersv1ogj7Jo",
+    "title": "Anthropic’s New AI Solves Problems…By Cheating",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1362,
+    "url": "https://youtube.com/watch?v=Ersv1ogj7Jo",
+    "preview": "Look, we have some work to do. We have a 245-page \npaper from Anthropic about their new AI system,   Mythos. The best cure for insomnia. \nMwah! Now, we are scientists here,   we want to experiment with code, models, review \nindependent benchmarks for these systems to make   sure they actually work i"
+  },
+  {
+    "video_id": "mFSFvKquXwI",
+    "title": "NVIDIA’s New AI Shouldn’t Work…But It Does",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1311,
+    "url": "https://youtube.com/watch?v=mFSFvKquXwI",
+    "preview": "Dear Fellow Scholars, this is Two Minute \nPapers with Dr. Károly Zsolnai-Fehér. We’ve been trying out doing the videos with a \ncamera. I really enjoyed it, and your feedback   was also absolutely incredible. I’ve never \nseen anything like this. So many comments,   thank you so much for the kind word"
+  },
+  {
+    "video_id": "yzajLZXh9JU",
+    "title": "Solved: The Bug That Haunted AI Video For Years",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1287,
+    "url": "https://youtube.com/watch?v=yzajLZXh9JU",
+    "preview": "Today, generating eye-poppingly high-quality \nvideos just by writing a text prompt is possible.   You can also get exceptional controllability \nas well. You can generate three movies that   look completely different, \nbut land on the same ending.   Almost anything you can think becomes \nachievable,"
+  },
+  {
+    "video_id": "eCw33snvoNI",
+    "title": "NVIDIA's New AI Turns One Photo Into A World That Never Breaks",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1270,
+    "url": "https://youtube.com/watch?v=eCw33snvoNI",
+    "preview": "I can’t believe that we are getting \nthis for free. What is this? Well, hold on to your papers Fellow \nScholars because you take just one image,   and it creates a 3D explorable world \nout of it. Super cool. They call it   Lyra 2.0. It sounds almost too good to be \ntrue, and it often is. I’ll tell y"
+  },
+  {
+    "video_id": "Xf_v62TQOx4",
+    "title": "NVIDIA's New AI Broke My Brain",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1236,
+    "url": "https://youtube.com/watch?v=Xf_v62TQOx4",
+    "preview": "Let’s see what is going on here. This is me \naround 9am. A bit wobbly, steps are unsure,   yup, that checks out. Now then, give me my \nfake badge. Thank you sir. Hehehe, no one   noticed. Now let’s proceed to the next step of my \nmastermind plans. Let’s eat all their food. Wait,   they noticed. Proc"
+  },
+  {
+    "video_id": "LpXhy2iiaQE",
+    "title": "DeepSeek’s New AI Is A Game Changer",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1198,
+    "url": "https://youtube.com/watch?v=LpXhy2iiaQE",
+    "preview": "Hmm, why does this deep sea quirk exist? I mean, it adds vision capabilities to the deep sea AI system, but that's not new. A lot of other AI systems have vision capabilities. You just drop an image here and it works. Even video and even for open models. So, why do we need this paper? Well, they did"
+  },
+  {
+    "video_id": "4nQnhjimB4Y",
+    "title": "OpenAI's ChatGPT 5.5 Instant: The Good, The Bad And The Insane",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1173,
+    "url": "https://youtube.com/watch?v=4nQnhjimB4Y",
+    "preview": "Everyone is talking about Frontier chat GPT models that do all the thinking and the brilliant rocket science stuff. But, the instant version. This is actually what hundreds of millions of people around the globe use. It's what grandma uses when asking about medication. Super important. So, new chat"
   },
   {
     "video_id": "XoAo5-kv80w",
@@ -648,6 +909,24 @@
     "preview": "[music] >> Hi, I'm Manish a product manager at Weights & Biases by CoreWeave. Today, I'm going to quickly walk you through how to train and analyze your robotic models within Weights & Biases. We have trained a a humanoid robot to walk using reinforcement learning. And we are using tools such as NVI"
   },
   {
+    "video_id": "7YVrb3-ABYE",
+    "title": "Google’s New AI Just Broke My Brain",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1144,
+    "url": "https://youtube.com/watch?v=7YVrb3-ABYE",
+    "preview": "Google made a huge announcement about their new \nmethod that lets us run AI techniques cheaper.  The news took the world by storm. \nThis came at the best possible time,   because we have a worldwide memory \nshortage. So the prices for capable   laptops and GPUs and anything that can run \nthese AI sy"
+  },
+  {
+    "video_id": "ZQAz_HrUq68",
+    "title": "NVIDIA’s New AI Just Changed Everything",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 1118,
+    "url": "https://youtube.com/watch?v=ZQAz_HrUq68",
+    "preview": "Remember that most AI systems are proprietary, \nwe have to pay a subscription for them,   and no one knows how they work or \nwhat data they were trained on? Well, now hold on to your papers Fellow \nScholars and check out this incredible work,   and when I first saw it, my jaw hit the floor. \nThey ab"
+  },
+  {
     "video_id": "45Beo0ZkJJA",
     "title": "Getting started with Weights & Biases for robotics",
     "channel": "Weights & Biases",
@@ -657,6 +936,15 @@
     "preview": "[music] >> Hi, my name is Anoop and I'm a machine learning engineer. >> [music] >> Right now, I'm working on fine-tuning some vision language action models for a robotics team. And because fine-tuning these models takes so long, sometimes up to a week, my team has started using weights and biases to"
   },
   {
+    "video_id": "QzZ4VwDHAT4",
+    "title": "Sakana AI’s God Simulator Is Brilliant",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 958,
+    "url": "https://youtube.com/watch?v=QzZ4VwDHAT4",
+    "preview": "I love this work. This comes from the Sakana \nAI lab in Tokyo, and it feels like mad science   in the best possible way. I had an almost illegal \namount of fun with it, and you can try it too   right now. Assuming we don’t crash this website, \nwhich we sometimes do in a Scholarly Stampede.  Now this"
+  },
+  {
     "video_id": "ybg-Vw6ApwU",
     "title": "AI Builders: Building an AI agent for interior design",
     "channel": "Weights & Biases",
@@ -664,6 +952,15 @@
     "words": 867,
     "url": "https://youtube.com/watch?v=ybg-Vw6ApwU",
     "preview": "Hi, I'm Russ, and this is AI Builders, a video series for developers who love to build and are now incorporating AI in pretty much everything we do. One of my responsibilities at Weights & Biases is to build sales demos. And because I want to make these demos as close to real-life applications as po"
+  },
+  {
+    "video_id": "4wC8hnQawiA",
+    "title": "NVIDIA New AI Is An Efficiency Monster",
+    "channel": "Two Minute Papers",
+    "published": "2026-05-29T00:00:00+00:00",
+    "words": 846,
+    "url": "https://youtube.com/watch?v=4wC8hnQawiA",
+    "preview": "Hmm, 30 billion parameters in a new open free AI model where images, video, and audio all work. Hmm, [clears throat] why? There are a bunch of other free systems around in this area like the amazing Gemma 4. So, what does this do better than those? Two words, throughput and cost efficiency. Okay, wh"
   },
   {
     "video_id": "ylvhGPnusS4",
