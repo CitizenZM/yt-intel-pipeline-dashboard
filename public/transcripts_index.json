@@ -144,6 +144,15 @@
     "preview": "[Submit subtitle corrections at criblate.com] Imagine yourself in an art museum. As you stroll through the galleries, you come across a large low table covered in small white skeletal frames. Each looks like a random fragment of a cube, and they're all laid out in an orderly grid. What we're looking"
   },
   {
+    "video_id": "bAWV_yrqx4w",
+    "title": "[GRPO Explained] DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 9614,
+    "url": "https://youtube.com/watch?v=bAWV_yrqx4w",
+    "preview": "Hello there. Today we're looking at DeepSeekMath, pushing the limits of mathematical reasoning in open language models. Now, this paper is a bit older. Um, it's from, as you can see over here, from the 27th of April, 2024. Nevertheless, it introduces something called GRPO, the group relative policy"
+  },
+  {
     "video_id": "QxfsjDBDw3M",
     "title": "She Raised $64M to Build an AI Math Prodigy | Carina Hong, CEO of Axiom",
     "channel": "Weights & Biases",
@@ -171,6 +180,15 @@
     "preview": "autonomous driving is all about looking at the AV problem with an AI approach. There is an opportunity there to drive accidents down to near zero. So, what we did is we raised 1 and 1/2 million dollars, got some friends together, we rented a house, and we put our car in the garage and started hackin"
   },
   {
+    "video_id": "FGnAeUXRZ4E",
+    "title": "Training a Unitree G1 to Walk w/ Reinforcement Learning",
+    "channel": "Sentdex",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 8925,
+    "url": "https://youtube.com/watch?v=FGnAeUXRZ4E",
+    "preview": "Hello, Jeff. Oh my god. [snorts] Oh my god, Jeff. Oh my god. He's working. He's working. Oh my god. He's kind of working. He's kind of working. Yes. Oh my god. Oh, this is actually damp or uh not damp but loose. Yo, he's on his own. He is balanced on his own. Yes. Look. Yeah. [snorts] Oh my god. Pul"
+  },
+  {
     "video_id": "uo1I6lS5DYU",
     "title": "Wikipedia Pressed the Red button on Odin | TheStandup",
     "channel": "ThePrimeagen",
@@ -180,6 +198,15 @@
     "preview": "Welcome everybody to the stand of today. We might have one of the single greatest episodes ever as we will be arguing over everything that is just so dang intense. But before we begin, before I even get to the episode, we always have to address the blockers. Do we have any blockers? Yeah, yeah. Yeah"
   },
   {
+    "video_id": "wIGOnM6Cf_E",
+    "title": "Human Stories in AI: Abbas Merchant@Matics Analytics",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 8754,
+    "url": "https://youtube.com/watch?v=wIGOnM6Cf_E",
+    "preview": "[Music] hello I'm Josh starmer and welcome to human stories in AI brought to you by Stack quest in this series we'll hear about the career journeys of passionate AI experts from their humble beginnings to conquered challenges we'll be inspired by the real world experiences of professionals thriving"
+  },
+  {
     "video_id": "ldxFjLJ3rVY",
     "title": "How (and why) to take a logarithm of an image",
     "channel": "3Blue1Brown",
@@ -187,6 +214,15 @@
     "words": 8541,
     "url": "https://youtube.com/watch?v=ldxFjLJ3rVY",
     "preview": "[Submit subtitle corrections at criblate.com]\nWhenever I'm making one of these videos, there's sometimes a special moment where the act of animating involves solving a whole bunch of little technical puzzlers, and then the underlying math I'm trying to explain clicks for me in a way that it hadn't b"
+  },
+  {
+    "video_id": "V71AJoYAtBQ",
+    "title": "On the Biology of a Large Language Model (Part 2)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 7898,
+    "url": "https://youtube.com/watch?v=V71AJoYAtBQ",
+    "preview": "Hello and welcome back to our analysis of on the biology of a large language model by anthropic. This is a blog post that anthropic has published uh investigating what they call the biology of a large language model. This works through uh a technique called attribution graphs. So in essence they are"
   },
   {
     "video_id": "3A4y_Iw_gpU",
@@ -234,6 +270,15 @@
     "preview": "A lot of pop science outlets give a certain summary of quantum computing that I can almost guarantee leads to misconceptions. The summary goes something like this. In a classical computer, data is stored with bits, some sequence of ones and zeros, but in a quantum computer, you are able to represent"
   },
   {
+    "video_id": "mU3g2YPKlsA",
+    "title": "On the Biology of a Large Language Model (Part 1)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 7465,
+    "url": "https://youtube.com/watch?v=mU3g2YPKlsA",
+    "preview": "Hello. Today we're taking a look at on the biology of a large language model which is a sort of paper published by anthropic on their kind of series on transformer circuits where they investigate what's going on inside of transformer language models and sort of how do they come to their conclusions."
+  },
+  {
     "video_id": "itRV2jEtV8Q",
     "title": "Simulating and understanding phase change | Guest video by Vilas Winstein",
     "channel": "3Blue1Brown",
@@ -241,6 +286,33 @@
     "words": 7309,
     "url": "https://youtube.com/watch?v=itRV2jEtV8Q",
     "preview": "[Submit subtitle corrections at criblate.com] This is a video about phase transitions. Our main goal will be to study a simulation of a discretized fluid model, which has a phase transition as the parameters are varied. That's what you're looking at right now, and it's called the liquid vapor model."
+  },
+  {
+    "video_id": "-r0XPC7TLzY",
+    "title": "Safety Alignment Should be Made More Than Just a Few Tokens Deep (Paper Explained)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 7188,
+    "url": "https://youtube.com/watch?v=-r0XPC7TLzY",
+    "preview": "hello there today we're going to look at safety alignment should be made more than just a few tokens Deep by Anonymous authors so this is a paper that had been submitted as far as I can tell to eclair is currently on open review and has already gotten reviews and is one of the papers with the highes"
+  },
+  {
+    "video_id": "RAEy3JZmIaA",
+    "title": "Energy-Based Transformers are Scalable Learners and Thinkers (Paper Review)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 7089,
+    "url": "https://youtube.com/watch?v=RAEy3JZmIaA",
+    "preview": "Hello, how's it going? Today we're going to look at this paper right here. Energy- based transformers are scalable learners and thinkers. This paper combines the uh general concept of energybased models with transformers and suggests a learning paradigm for it and shows how that learning paradigm ap"
+  },
+  {
+    "video_id": "zKohTkN0Fyk",
+    "title": "[Paper Analysis] On the Theoretical Limitations of Embedding-Based Retrieval (Warning: Rant)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 7087,
+    "url": "https://youtube.com/watch?v=zKohTkN0Fyk",
+    "preview": "Hello there. Today we're going to look at on the theoretical limitations of embedding based retrieval. And this paper is really interesting uh because it proves something about embedding based retrieval. So think vector databases in rag and things like this. And the paper proves effectively that the"
   },
   {
     "video_id": "M_HxHr7du5M",
@@ -306,6 +378,15 @@
     "preview": "Hey everyone. Uh, good to be here. Uh, I'm Jerry, co-founder, CEO of Llama Index. Uh, for those of you who might not have heard of us before, uh, today we're basically focused all on building the best-in-class agentic document infrastructure. If you've heard of us before, we started off as a pretty"
   },
   {
+    "video_id": "JV0S5f89-Q4",
+    "title": "Human Stories in AI: Tommy Tang",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 5958,
+    "url": "https://youtube.com/watch?v=JV0S5f89-Q4",
+    "preview": "hello I'm Josh starmer and welcome to human stories and AI with stack Quest and lightning AI in this series we'll hear about the career journeys of passionate AI experts from their humble beginnings to conquered challenges will be inspired by the realworld experiences of professionals thriving in th"
+  },
+  {
     "video_id": "Nao16-6l6dQ",
     "title": "[Paper Analysis] The Free Transformer (and some Variational Autoencoder stuff)",
     "channel": "Yannic Kilcher",
@@ -351,6 +432,15 @@
     "preview": "We are investigating unauthorized access to GitHub's internal repositories. While we currently have no evidence of impact to customer information stored outside of GitHub's internal repositories, such as our customers, enterprises, organizations, and repos, we are closely monitoring our infrastructu"
   },
   {
+    "video_id": "hpC4qjWu_aY",
+    "title": "Context Rot: How Increasing Input Tokens Impacts LLM Performance (Paper Analysis)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 5525,
+    "url": "https://youtube.com/watch?v=hpC4qjWu_aY",
+    "preview": "Hello, today we are looking at context rot how increasing input tokens impacts LLM performance. This paper looks at what happens if with these long context models now we are just sort of putting more and more stuff into the context of LLMs and even though all of these models do these evaluations the"
+  },
+  {
     "video_id": "-j8PzkZ70Lg",
     "title": "The Physics of Euler's Formula | Laplace Transform Prelude",
     "channel": "3Blue1Brown",
@@ -358,6 +448,15 @@
     "words": 5347,
     "url": "https://youtube.com/watch?v=-j8PzkZ70Lg",
     "preview": "[Submit subtitle corrections at criblate.com]\nThis is the first video in a trilogy aimed at demystifying the Laplace transform, a powerful tool for studying differential equations. Although we won't dig into the Laplace transform itself until the next two chapters, everything that we cover here sets"
+  },
+  {
+    "video_id": "loaTGpqfctI",
+    "title": "Byte Latent Transformer: Patches Scale Better Than Tokens (Paper Explained)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 5319,
+    "url": "https://youtube.com/watch?v=loaTGpqfctI",
+    "preview": "hello there today we're looking at the paper bite lat and Transformer patches scale better than tokens this paper in a sense does away with classic fixed vocabulary based tokenization and in doing so develops a new architecture called The Bite latent Transformer and in their experiments they show th"
   },
   {
     "video_id": "6dTyOl1fmDo",
@@ -405,6 +504,15 @@
     "preview": "[snorts] Hello. Today we're going to look at Titans learning to memorize at test time. This is a paper by Google research and has been pushed as part of their Nurips publications. So there's a blog post about it and people posted on social media about it and um I have to admit I just fell for the ma"
   },
   {
+    "video_id": "QhWZq8oBpVw",
+    "title": "Human Stories in AI: Xavier Moyá",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 5095,
+    "url": "https://youtube.com/watch?v=QhWZq8oBpVw",
+    "preview": "hello I'm Josh starmer and welcome to human stories and AI with stack Quest and lightning AI in this series we'll hear about the career journeys of passionate AI experts from their humble beginnings to conquered challenges will be inspired by the realworld experiences of professionals thriving in th"
+  },
+  {
     "video_id": "hFMaT9oRbs4",
     "title": "Terence Tao continuing history’s cleverest cosmological measurements",
     "channel": "3Blue1Brown",
@@ -412,6 +520,15 @@
     "words": 5057,
     "url": "https://youtube.com/watch?v=hFMaT9oRbs4",
     "preview": "This animation is zooming out by a factor of 10 every 2 seconds. Maybe you've seen things like this before, conveying the mind-boggling scale of our universe, but here, in this video, you and I are going to continue the saga through the many moments of delightful ingenuity throughout Human history t"
+  },
+  {
+    "video_id": "eRPSRSGiAA8",
+    "title": "Testing VLMs and LLMs for robotics w/ the Jetson Thor devkit",
+    "channel": "Sentdex",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 4991,
+    "url": "https://youtube.com/watch?v=eRPSRSGiAA8",
+    "preview": "What is going on everybody and welcome to something I have been waiting for and that is the Jetson Thor devkit. Now if you're like me when you heard about this thing when it was announced you heard one spec and one spec only and that was the 128 gigabytes of video memory on this thing and then you k"
   },
   {
     "video_id": "_w3WSNr6lO4",
@@ -432,6 +549,15 @@
     "preview": "I need to be real with you guys. I'm legitimately scared to make this video. Not just because I think Google might cut me off from early access because I'm here to tell you how bad a lot of the things they're doing are, but because it might put my entire career at risk. The last time I came out to e"
   },
   {
+    "video_id": "m8fvdRZb5CE",
+    "title": "Human Stories in AI: Amy Finnegan",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 4909,
+    "url": "https://youtube.com/watch?v=m8fvdRZb5CE",
+    "preview": "hello I'm Josh starmer and welcome to human stories in AI with stack Quest and lightning AI in this series we'll hear about the career journeys of passionate AI experts from their humble beginnings to conquered challenges will be inspired by the realworld experiences of professionals thriving in the"
+  },
+  {
     "video_id": "-TlA_89Djkg",
     "title": "We built a RAG system for a real client",
     "channel": "Codebasics",
@@ -441,6 +567,15 @@
     "preview": "In real life we have to use this kind of mapping this kind of huristic custom approaches to retrieve the relevant context. If the context is out of context window you have to do pruning summarization all those techniques. How do we reduce the manual labor of these junior associates so that they coul"
   },
   {
+    "video_id": "aFDOzpTeg0s",
+    "title": "The Essence of Linear Regression",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 4571,
+    "url": "https://youtube.com/watch?v=aFDOzpTeg0s",
+    "preview": "Fit a line to your data, then figure out if it's any good at making predictions. Hooray! Stack Quest. Hello, I'm Josh Starmer and welcome to Stat Quest. Today we're going to talk about the essence of linear regression. This Stat Quest is brought to you by the letters A, B, and C. A always B Curious."
+  },
+  {
     "video_id": "C5oYk1bn4_o",
     "title": "AI Dev 26 x SF | Daniel Beutel: Flower SuperGrid Agents",
     "channel": "DeepLearning.AI",
@@ -448,6 +583,15 @@
     "words": 4515,
     "url": "https://youtube.com/watch?v=C5oYk1bn4_o",
     "preview": "I'm here today to talk about a new frontier that we see opening in AI. That frontier is collaborative AI systems. Um that frontier is going to unlock a new category of systems to be built, systems that were not possible before. But before I do that, I just want to say a few words about um who we are"
+  },
+  {
+    "video_id": "C9QSpl5nmrY",
+    "title": "Coding a ChatGPT Like Transformer From Scratch in PyTorch",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 4349,
+    "url": "https://youtube.com/watch?v=C9QSpl5nmrY",
+    "preview": "we're going to code a Transformer from scratch hooray stat Quest hello I'm Josh ster and welcome to stat Quest today we're going to talk about coding Transformers from scratch in pi torch this stack Quest is brought to you by the letters a b and c a always BB C curious always be curious I also want"
   },
   {
     "video_id": "FE-hM1kRK4Y",
@@ -466,6 +610,15 @@
     "words": 4271,
     "url": "https://youtube.com/watch?v=huAwz_BR8WM",
     "preview": "weak and easy questions. Please try to answer in one sentence, sometimes one word. >> Oh, wow. That's hard. Um, >> Fineman or Newton. >> Oh, wow. That's even harder. >> Dennis, I don't know if I told you, but my mother recently got some health scan results. It was a massive video file, and we had to"
+  },
+  {
+    "video_id": "DkmfIQRDyXc",
+    "title": "Human Stories in AI: Nana Janashia@TechWorld With Nana",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 4210,
+    "url": "https://youtube.com/watch?v=DkmfIQRDyXc",
+    "preview": "[Music] hello I'm Josh starmer and welcome to human stories in AI brought to you by Stack quest in this series we'll hear about the career journeys of passionate AI experts from their humble beginnings to conquered challenges we'll be inspired by the real world experiences of professionals thriving"
   },
   {
     "video_id": "Ca-BkMeRJ74",
@@ -493,6 +646,15 @@
     "words": 4133,
     "url": "https://youtube.com/watch?v=n366hY4JZ9U",
     "preview": "Today we are going to hear about uh the shift towards agentic engineering and increased code output. Uh welcome Paul. >> One minute into this conference, Jonathan said let's talk about the future of software engineering. Let's have a conversation. Let's figure it out. That's exactly what we're going"
+  },
+  {
+    "video_id": "gfU5y7qCxF0",
+    "title": "TokenFormer: Rethinking Transformer Scaling with Tokenized Model Parameters (Paper Explained)",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 4063,
+    "url": "https://youtube.com/watch?v=gfU5y7qCxF0",
+    "preview": "hello there yeah it's cold here um we cannot be dissuaded from reviewing papers today we're going to look at token forer rethinking Transformer scaling with tokenized model parameters this seems to be a collaboration of MOX plunk Institute for informatics Google and picking University this paper pro"
   },
   {
     "video_id": "dgbdyxe435E",
@@ -531,6 +693,24 @@
     "preview": "I'm shooting this video on 24th March 2026 and by this time several changes have happened in the world of AI. In fact, our own team has seen a humongous transformation. Our team has vibe coded over 35 applications, pieces of software, tools, automation workflows, and so on. We have replaced several"
   },
   {
+    "video_id": "DVGmsnxB2UQ",
+    "title": "Reinforcement Learning with Neural Networks: Mathematical Details",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 3456,
+    "url": "https://youtube.com/watch?v=DVGmsnxB2UQ",
+    "preview": "if you make a guess and you make the wrong guess then multiply it by a negative number and correct the mistake stack Quest bam hello I'm Josh starmer and welcome to stack Quest today we're going to talk about reinforcement learning with neural networks and this time we're going to focus on the mathe"
+  },
+  {
+    "video_id": "9hbQieQh7-o",
+    "title": "Reinforcement Learning with Neural Networks: Essential Concepts",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 3455,
+    "url": "https://youtube.com/watch?v=9hbQieQh7-o",
+    "preview": "When you don't know, take a guess and then see what happens and update your guess after that. Stack Quest. Hello, I'm Josh Starmer and welcome to Stack Quest. Today we're going to talk about reinforcement learning with neural networks and we're going to cover the essential concepts. This stack quest"
+  },
+  {
     "video_id": "GScUjc-A4yE",
     "title": "AI Agent Fundamentals",
     "channel": "Codebasics",
@@ -565,6 +745,15 @@
     "words": 3193,
     "url": "https://youtube.com/watch?v=Dlsa9EBKDGI",
     "preview": "Last week I put up a video introducing quantum computing, and in the final section we were stepping through something known as Grover's algorithm. And based on the comments that I saw, I think there was a very common point of confusion that reveals I clearly could have done a better job explaining a"
+  },
+  {
+    "video_id": "q-BiW5srMFQ",
+    "title": "How AI works in Super Simple Terms!!!",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 3170,
+    "url": "https://youtube.com/watch?v=q-BiW5srMFQ",
+    "preview": "An AI might seem [music] like magic, but we're going to learn how it works using simple language. [music] Hooray! Stack Quest. Hello, I'm Josh Starmer and welcome to Stat Quest. Today we're going to talk about how AI works in super simple terms. This Stat Quest is brought to you by the letters A, B,"
   },
   {
     "video_id": "L_47rVSuwBU",
@@ -648,6 +837,24 @@
     "preview": "wearing a hat. Do you see this hat? It's a cool hat, isn't it? I'll be taking no further questions. Do you see this right here? Does this look like fun to you? Do are you having some sort of hopes of being able to go to this place? Well, guess what? Don't have that because this is actually a horribl"
   },
   {
+    "video_id": "GDN649X_acE",
+    "title": "Encoder-Only Transformers (like BERT) for RAG, Clearly Explained!!!",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 2521,
+    "url": "https://youtube.com/watch?v=GDN649X_acE",
+    "preview": "in code only Transformers can cluster things and classify things that's cool stack Quest hello I'm Josh starmer and welcome to stack Quest today we're going to talk about incoder only Transformers and they're going to be clearly explained this stack Quest is brought to you by the letters a b and c a"
+  },
+  {
+    "video_id": "Z-T0iJEXiwM",
+    "title": "Reinforcement Learning: Essential Concepts",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 2510,
+    "url": "https://youtube.com/watch?v=Z-T0iJEXiwM",
+    "preview": "reinforcement learning it's just like me and you we learn and adapt from experience yes we do stat Quest bam hello I'm Josh starmer and welcome to stack Quest today we're going to talk about reinforcement learning and we're going to cover the essential Concepts this stag Quest is brought to you by t"
+  },
+  {
     "video_id": "FkTwcxnSPes",
     "title": "W&B Models end-to-end demo",
     "channel": "Weights & Biases",
@@ -664,6 +871,15 @@
     "words": 2490,
     "url": "https://youtube.com/watch?v=cnt83ML6-fA",
     "preview": "So, I'm Andy. I'm the CTO and co-founder of Various AI. Um, I'm going to talk about simulation environments for agents. Now, I'm assuming you're here because you're very interested in agents, but I also do want to see a show of hands. Who here is building AI agents, not just using them? Cool. Yeah,"
+  },
+  {
+    "video_id": "qPN_XZcJf_s",
+    "title": "Reinforcement Learning with Human Feedback (RLHF), Clearly Explained!!!",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 2481,
+    "url": "https://youtube.com/watch?v=qPN_XZcJf_s",
+    "preview": "If you tell me what you like and what you don't like, I'll use that to train my model. Stack Quest. Hello, I'm Josh Starmer and welcome to Stack Quest. Today we're going to talk about reinforcement learning with human feedback and it's going to be clearly explained. This Stack Quest is brought to yo"
   },
   {
     "video_id": "NtvEHHwKdUE",
@@ -709,6 +925,15 @@
     "words": 2241,
     "url": "https://youtube.com/watch?v=Aiz6yMTLeaE",
     "preview": "where the goblins came from. What? What is Open AI talking about? Yeah. Yeah. Open AI, the one that that raised $122 billion, is talking about goblins. What? If you're anything like me, the only thing that comes to your mind when it comes to goblins is your chin. Uh, and so this is a little bit stra"
+  },
+  {
+    "video_id": "0bpYCxv2qhw",
+    "title": "[Video Response] What Cloudflare's code mode misses about MCP and tool calling",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 2203,
+    "url": "https://youtube.com/watch?v=0bpYCxv2qhw",
+    "preview": "Hello, this is in many ways a response video to Theo or T3 GGG's video called MCP is the wrong abstraction and it is also a video about this Cloudflare article which that video is about called code mode the better way to use MCP and I want to show you this article but also point out something that p"
   },
   {
     "video_id": "Q9GAJ_ka4l4",
@@ -900,6 +1125,15 @@
     "preview": "Everyone is talking about Frontier chat GPT models that do all the thinking and the brilliant rocket science stuff. But, the instant version. This is actually what hundreds of millions of people around the globe use. It's what grandma uses when asking about medication. Super important. So, new chat"
   },
   {
+    "video_id": "hkAH7-u7t5k",
+    "title": "AGI is not coming!",
+    "channel": "Yannic Kilcher",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 1173,
+    "url": "https://youtube.com/watch?v=hkAH7-u7t5k",
+    "preview": "Hello. I'm out of my usual room today. As you can see, I'm flying to the US for work, but I wanted to give some quick updates on OpenAI's new model launches the past week. So, they've released an open- source model in different variants, and they've also released a new frontier model in different va"
+  },
+  {
     "video_id": "XoAo5-kv80w",
     "title": "Track robotics training dynamics in Weights & Biases",
     "channel": "Weights & Biases",
@@ -945,6 +1179,15 @@
     "preview": "I love this work. This comes from the Sakana \nAI lab in Tokyo, and it feels like mad science   in the best possible way. I had an almost illegal \namount of fun with it, and you can try it too   right now. Assuming we don’t crash this website, \nwhich we sometimes do in a Scholarly Stampede.  Now this"
   },
   {
+    "video_id": "WRYk7oZiogg",
+    "title": "StatQuest: Career Advice from Tech Industry Leaders",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 939,
+    "url": "https://youtube.com/watch?v=WRYk7oZiogg",
+    "preview": "Career advice from for tech industry leaders. Hooray. Stack Quest. Bam. Hello, I'm Josh Starmer and welcome to Stat Quest. Today we're going to talk about career advice from tech industry leaders. This Stat Quest is brought to you by the letters A, B, and C. A always B Curious. Always be curious. If"
+  },
+  {
     "video_id": "ybg-Vw6ApwU",
     "title": "AI Builders: Building an AI agent for interior design",
     "channel": "Weights & Biases",
@@ -979,5 +1222,14 @@
     "words": 806,
     "url": "https://youtube.com/watch?v=LXDizQxkboo",
     "preview": "Hi, I'm Russ from Weights & Biases. And today I'll be taking you on a tour of the Weights & Biases mobile app that enables real-time run tracking, live metrics, and notifications, allowing you to optimize training performance anytime, anywhere. As AI researchers and engineers ourselves, we know the"
+  },
+  {
+    "video_id": "0QOm7Sn5uwQ",
+    "title": "A few more lessons from my Pop!",
+    "channel": "StatQuest with Josh Starmer",
+    "published": "2026-05-30T00:00:00+00:00",
+    "words": 720,
+    "url": "https://youtube.com/watch?v=0QOm7Sn5uwQ",
+    "preview": "a few more lessons from my pop hooray stack Quest hello I'm Josh starmer and welcome to stack Quest today we're going to talk about a few more lessons from my pop this stack Quest is brought to you by the letters a b and c a always BB C curious always be curious if you don't already know September 4"
   }
 ]
